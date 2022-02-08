@@ -1,0 +1,2 @@
+[alias]
+   l = log --pretty=format:\"%h - %an, %ar : %s\" --decorate
