@@ -1,0 +1,213 @@
+{
+   /* VSCode interface configuration */
+   "workbench.colorTheme": "Aura Soft Dark",
+   "workbench.iconTheme": "material-icon-theme",
+   "workbench.startupEditor": "none",
+   "window.zoomLevel": 2,
+   "typescript.inlayHints.parameterNames.enabled": "literals",
+   "typescript.inlayHints.variableTypes.enabled": false,
+   "typescript.inlayHints.functionLikeReturnTypes.enabled": false,
+   "typescript.inlayHints.propertyDeclarationTypes.enabled": false,
+   "editor.parameterHints.enabled": false,
+   "editor.cursorStyle": "line-thin",
+   "editor.cursorBlinking": "expand",
+   "editor.minimap.enabled": false,
+   "editor.tabSize": 3,
+   "editor.detectIndentation": true,
+   "editor.renderLineHighlight": "gutter",
+   "editor.suggestSelection": "first",
+   "editor.suggest.preview": true,
+   "editor.suggest.showDeprecated": true,
+   "editor.inlineSuggest.enabled": true,
+   "editor.rulers": [
+      100,
+      120
+   ],
+   "editor.codeActionsOnSave": {
+      "source.fixAll": true,
+      "source.sortImports": false
+   },
+   "editor.bracketPairColorization.enabled": true,
+   "diffEditor.ignoreTrimWhitespace": false,
+   "explorer.confirmDragAndDrop": false,
+   "explorer.confirmDelete": false,
+   "explorer.compactFolders": false,
+   /* Font configuration */
+   "editor.fontLigatures": true,
+   "editor.fontSize": 19,
+   "editor.lineHeight": 26,
+   "editor.fontFamily": "'Fira Code', 'JetBrains Mono', sans-serif",
+   /* Terminal Interface */
+   "terminal.integrated.cursorStyle": "underline",
+   "terminal.integrated.fontSize": 16,
+   "terminal.integrated.gpuAcceleration": "on",
+   "terminal.integrated.defaultLocation": "editor",
+   "terminal.integrated.shellIntegration.enabled": true,
+   "terminal.integrated.profiles.linux": {
+      "yarn": {
+         "path": "zsh",
+         "icon": "flame",
+         "color": "terminal.ansiRed",
+         "overrideName": true,
+         "args": [
+            "--beep"
+         ]
+      },
+      "git": {
+         "path": "zsh",
+         "icon": "git-pull-request",
+         "color": "terminal.ansiGreen",
+         "overrideName": true
+      },
+      "peam": {
+         "path": "zsh",
+         "icon": "heart",
+         "color": "terminal.ansiMagenta",
+         "overrideName": true,
+         "args": [
+            "--beep"
+         ]
+      }
+   },
+   "terminal.integrated.defaultProfile.linux": "peam",
+   "terminal.integrated.enableBell": true,
+   "terminal.integrated.enablePersistentSessions": false,
+   "files.insertFinalNewline": true,
+   "files.trimFinalNewlines": true,
+   /* Linting and intellisense */
+   "emmet.syntaxProfiles": {
+      "javascript": "jsx"
+   },
+   "emmet.includeLanguages": {
+      "javascript": "javascriptreact"
+   },
+   /* Language configuration */
+   "javascript.updateImportsOnFileMove.enabled": "always",
+   "typescript.updateImportsOnFileMove.enabled": "always",
+   "javascript.suggest.autoImports": true,
+   "typescript.suggest.autoImports": true,
+   "files.associations": {
+      "*.mdx": "markdown",
+   },
+   /* Extensions and Modules configuration */
+   "material-icon-theme.folders.associations": {
+      "fake": "mock",
+      "infra": "app",
+      "schema": "class",
+      "http": "container",
+      "entities": "class",
+      "dtos": "typescript",
+      "typeorm": "database",
+      "migrations": "tools",
+      "context": "animation",
+      "modules": "components",
+      "implementations": "core",
+      "repositories": "mappings",
+      "components": "react-components",
+      "lottie": "animation",
+      ".jest": "config",
+      "cypress": "config",
+      "deploy": "config",
+      "mock-api": "mock",
+      ".next": "dist",
+      "devtools": "tools",
+      "blog": "content"
+   },
+   "material-icon-theme.files.associations": {
+      "tsconfig.json": "tune",
+      "ormconfig.json": "database",
+      "*.template.svg": "ejs",
+      "*.u": "../../icons/umbra-moon",
+      "*.umb": "../../icons/umbra-moon",
+      "*.ub": "../../icons/umbra-moon"
+   },
+   "cSpell.language": "en,pt",
+   "cSpell.userWords": [
+      "bootcamp",
+      "borderless",
+      "bracestack",
+      "cellptr",
+      "challengeid",
+      "cleiton",
+      "cnpj",
+      "codeptr",
+      "Confirmers",
+      "hocs",
+      "ispb",
+      "Linkedin",
+      "marguerita",
+      "monospace",
+      "pmqueiroz",
+      "PTBR",
+      "Reactars",
+      "rehype",
+      "repos",
+      "roboto",
+      "roboto slab",
+      "slab",
+      "stackoverflow",
+      "storaged",
+      "testid",
+      "topups",
+      "typeorm",
+      "unform",
+      "uuidv",
+      "varchar"
+   ],
+   "cSpell.enabledLanguageIds": [
+      "csharp",
+      "go",
+      "javascript",
+      "javascriptreact",
+      "markdown",
+      "php",
+      "plaintext",
+      "typescript",
+      "typescriptreact",
+      "yml",
+      "lua"
+   ],
+   "discord.detailsIdling": "Settings...",
+   "discord.idleTimeout": 99999999999,
+   "discord.largeImage": "Coding a {lang} file",
+   "discord.detailsEditing": "{file_name} (Ln {current_line}, Col {current_column})",
+   "discord.lowerDetailsEditing": "{git_branch}",
+   "discord.removeRemoteRepository": true,
+   "discord.smallImage": "Best Editor Ever",
+   "discord.lowerDetailsIdling": "Settings",
+   "github.copilot.inlineSuggest.enable": true,
+   "errorLens.gutterIconsEnabled": true,
+   "errorLens.gutterIconSize": "50%",
+   "errorLens.gutterIconSet": "circle",
+   "errorLens.fontWeight": "300",
+   "errorLens.messageTemplate": "cuidado com a mula: $message",
+   "errorLens.statusBarIconsUseBackground": false,
+   "errorLens.enabledDiagnosticLevels": ["error"],
+   "errorLens.excludeBySource": ["eslint"],
+   "errorLens.fontSize": "16",
+   "workbench.colorCustomizations": {
+      "errorLens.errorBackground": "#21202E",
+   },
+   "github.copilot.enable": {
+      "*": true,
+      "yaml": false,
+      "plaintext": false,
+      "markdown": false,
+      "javascript": true
+   },
+   "eslint.rules.customizations": [
+      {
+         "rule": "react-hooks/exhaustive-deps", "severity": "off"
+      }
+   ],
+   "[c]": {
+      "editor.defaultFormatter": "xaver.clang-format"
+   },
+   "[cpp]": {
+      "editor.defaultFormatter": "xaver.clang-format"
+   },
+   "extensions.ignoreRecommendations": true,
+   "cSpell.ignoreWords": [
+      "sendgrid"
+   ]
+}
