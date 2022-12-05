@@ -38,19 +38,36 @@ deps_orders+=( "homebrew" )
 deps_orders+=( "asdf" )
 
 log info "starting setup"
-log info "installing dependencies"
 
-for dep in "${deps_orders[@]}"; do 
-   log info "trying to install $dep"
+if [[ ${options[only-settings]} == true ]]; then
+   log info "skip dependencies install"
+else
+   log info "installing dependencies"
 
-   current_install=$(which $dep)
-   check_install_exit=$?
+   for dep in "${deps_orders[@]}"; do 
+      log info "trying to install $dep"
 
-   if [ $check_install_exit -ne 1 ] ;then
-      log action "running ${dependencies[$dep]} script"
+      current_install=$(which $dep)
+      check_install_exit=$?
 
-      ${dependencies[$dep]}
-   else
-      log error "$dep already registered; skipping";
-   fi
+      if [ $check_install_exit -ne 1 ] ;then
+         log action "running ${dependencies[$dep]} script"
+
+         ${dependencies[$dep]}
+      else
+         log error "$dep already registered; skipping";
+      fi
+   done
+fi
+
+declare -A settings=( ["vscode-settings.jsonc"]="$HOME/.config/Code/User/settings.json" [".zshrc"]="$HOME/.zshrc" [".gitconfig"]="$HOME/.gitconfig" )
+declare -a settings_orders;
+
+settings_orders+=( "vscode-settings.jsonc" )
+settings_orders+=( ".zshrc" )
+
+for setting_file in "${settings_orders[@]}"; do 
+   log info "installing setting $setting_file"
+
+   cp $setting_file ${settings[$setting_file]}
 done

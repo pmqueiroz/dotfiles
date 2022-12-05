@@ -1,2 +1,7 @@
+[user]
+	name = pmqueiroz
+	email = pedroqueiroz593@gmail.com
+[core]
+	editor = code
 [alias]
    l = log --pretty=format:\"%h - %an, %ar : %s\" --decorate
