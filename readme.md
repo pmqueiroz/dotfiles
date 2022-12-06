@@ -1,4 +1,23 @@
+<!-- VARS -->
+[git-url]: https://git-scm.com/
+[curl-url]: https://curl.se/
+<!-- END_VARS -->
+
+<div align="center" >
+
+<img src="./.github/assets/logo.svg" width=200>
+
 just let the magic happens
+
+<div>
+
+### Requirements
+
+Before running this script make sure you have the following installed:
+   * [Git][git-url]
+   * [Curl][curl-url]
+
+### Run
 
 ```sh
    $ bash install
