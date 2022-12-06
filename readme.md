@@ -4,12 +4,10 @@
 <!-- END_VARS -->
 
 <div align="center" >
+   <img src="./.github/assets/logo_wo_blur.svg" width=300>
 
-<img src="./.github/assets/logo.svg" width=200>
-
-just let the magic happens
-
-<div>
+   just let the magic happens
+</div>
 
 ### Requirements
 
