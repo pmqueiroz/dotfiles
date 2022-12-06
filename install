@@ -31,21 +31,38 @@ log() {
    printf "${levels[$log_level]}[$display_level]$RESET ${@:2}\n\n"
 }
 
-declare -A dependencies=( 
-   ["asdf"]="./installs/asdf"
-   ["homebrew"]="./installs/brew"
- );
-declare -a deps_orders;
-
-deps_orders+=( "homebrew" )
-deps_orders+=( "asdf" )
-
 log info "starting setup"
 
-if [[ ${options[only-settings]} == true ]]; then
-   log info "skip dependencies install"
+if [[ ${options[skip-fonts]} != true ]]; then
+   log info "installing fonts"
+
+   fonts_paths="$HOME/.local/share/fonts"
+   mkdir -p $fonts_paths
+
+   for font in ./fonts/*.ttf
+   do
+      log info "installing font $font"
+
+      cp $font $fonts_paths
+   done
+
+   fc-cache -f -v
 else
+   log info "skip fonts install"
+fi
+
+if [[ ${options[skip-dependencies]} != true ]]; then
    log info "installing dependencies"
+
+
+   declare -A dependencies=( 
+      ["asdf"]="./installs/asdf"
+      ["homebrew"]="./installs/brew"
+   );
+   declare -a deps_orders;
+
+   deps_orders+=( "homebrew" )
+   deps_orders+=( "asdf" )
 
    for dep in "${deps_orders[@]}"; do 
       log info "trying to install $dep"
@@ -61,35 +78,29 @@ else
          log error "$dep already registered; skipping";
       fi
    done
+else
+   log info "skip dependencies install"
 fi
 
-declare -A settings=( 
-   ["vscode-settings.json"]="$HOME/.config/Code/User/settings.json"
-   ["keybindings.json"]="$HOME/.config/Code/User/keybindings.json"
-   [".zshrc"]="$HOME/.zshrc" 
-   [".gitconfig"]="$HOME/.gitconfig"
-)
+if [[ ${options[skip-settings]} != true ]]; then
+   declare -A settings=( 
+      ["vscode-settings.json"]="$HOME/.config/Code/User/settings.json"
+      ["keybindings.json"]="$HOME/.config/Code/User/keybindings.json"
+      [".zshrc"]="$HOME/.zshrc" 
+      [".gitconfig"]="$HOME/.gitconfig"
+   )
 
-declare -a settings_orders;
+   declare -a settings_orders;
 
-settings_orders+=( "vscode-settings.json" )
-settings_orders+=( "keybindings.json" )
-settings_orders+=( ".zshrc" )
+   settings_orders+=( "vscode-settings.json" )
+   settings_orders+=( "keybindings.json" )
+   settings_orders+=( ".zshrc" )
 
-for setting_file in "${settings_orders[@]}"; do 
-   log info "installing setting $setting_file"
+   for setting_file in "${settings_orders[@]}"; do 
+      log info "installing setting $setting_file"
 
-   cp $setting_file ${settings[$setting_file]}
-done
-
-log info "installing fonts"
-
-fonts_paths="$HOME/.local/share/fonts"
-mkdir -p $fonts_paths
-
-for font in ./fonts/*.ttf
-do
-   log info "installing font $font"
-
-   cp $font $fonts_paths
-done
+      cp $setting_file ${settings[$setting_file]}
+   done
+else
+   log info "skip dependencies install"
+fi
