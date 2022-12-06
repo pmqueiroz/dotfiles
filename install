@@ -60,6 +60,7 @@ if [[ ${options[skip-dependencies]} != true ]]; then
       ["code"]="./installs/code"
       ["zsh"]="./installs/zsh"
       ["pnpm"]="./installs/pnpm"
+      ["node"]="./installs/node"
    );
    declare -a deps_orders;
 
@@ -68,6 +69,7 @@ if [[ ${options[skip-dependencies]} != true ]]; then
    deps_orders+=( "code" )
    deps_orders+=( "zsh" )
    deps_orders+=( "pnpm" )
+   deps_orders+=( "node" )
 
    for dep in "${deps_orders[@]}"; do 
       log info "trying to install $dep"
