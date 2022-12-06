@@ -47,10 +47,10 @@ else
    for dep in "${deps_orders[@]}"; do 
       log info "trying to install $dep"
 
-      current_install=$(which $dep)
+      which $dep
       check_install_exit=$?
 
-      if [ $check_install_exit -ne 1 ] ;then
+      if [ $check_install_exit -ne 0 ] ;then
          log action "running ${dependencies[$dep]} script"
 
          ${dependencies[$dep]}
@@ -60,10 +60,11 @@ else
    done
 fi
 
-declare -A settings=( ["vscode-settings.jsonc"]="$HOME/.config/Code/User/settings.json" [".zshrc"]="$HOME/.zshrc" [".gitconfig"]="$HOME/.gitconfig" )
+declare -A settings=( ["vscode-settings.json"]="$HOME/.config/Code/User/settings.json" ["keybindings.json"]="$HOME/.config/Code/User/keybindings.json" [".zshrc"]="$HOME/.zshrc" [".gitconfig"]="$HOME/.gitconfig" )
 declare -a settings_orders;
 
-settings_orders+=( "vscode-settings.jsonc" )
+settings_orders+=( "vscode-settings.json" )
+settings_orders+=( "keybindings.json" )
 settings_orders+=( ".zshrc" )
 
 for setting_file in "${settings_orders[@]}"; do 

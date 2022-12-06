@@ -1,0 +1,21 @@
+#!/bin/bash
+
+declare -a extensions;
+
+extensions+=( "naumovs.color-highlight" )
+extensions+=( "dracula-theme.theme-dracula" )
+extensions+=( "pkief.material-icon-theme" )
+extensions+=( "ritwickdey.liveserver" )
+extensions+=( "icrawl.discord-vscode" )
+extensions+=( "jpoissonnier.vscode-styled-components" )
+extensions+=( "wix.vscode-import-cost" )
+extensions+=( "streetsidesoftware.code-spell-checker" )
+extensions+=( "eamodio.gitlens" )
+extensions+=( "firsttris.vscode-jest-runner" )
+extensions+=( "moyu.snapcode" )
+extensions+=( "GitHub.copilot" )
+extensions+=( "formulahendry.auto-rename-tag" )
+
+for ext in "${extensions[@]}"; do 
+    code --install-extension $ext
+done

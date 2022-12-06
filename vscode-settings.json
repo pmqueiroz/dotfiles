@@ -88,7 +88,7 @@
     "typescript.inlayHints.functionLikeReturnTypes.enabled": false,
     "typescript.inlayHints.propertyDeclarationTypes.enabled": false,
     "files.associations": {
-        "*.mdx": "markdown",
+        "*.mdx": "markdown"
     },
     /* Extensions and Modules configuration */
     "material-icon-theme.folders.associations": {
