@@ -59,6 +59,7 @@ if [[ ${options[skip-dependencies]} != true ]]; then
       ["homebrew"]="./installs/brew"
       ["code"]="./installs/code"
       ["zsh"]="./installs/zsh"
+      ["pnpm"]="./installs/pnpm"
    );
    declare -a deps_orders;
 
@@ -66,6 +67,7 @@ if [[ ${options[skip-dependencies]} != true ]]; then
    deps_orders+=( "asdf" )
    deps_orders+=( "code" )
    deps_orders+=( "zsh" )
+   deps_orders+=( "pnpm" )
 
    for dep in "${deps_orders[@]}"; do 
       log info "trying to install $dep"
