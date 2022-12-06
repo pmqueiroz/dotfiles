@@ -31,7 +31,10 @@ log() {
    printf "${levels[$log_level]}[$display_level]$RESET ${@:2}\n\n"
 }
 
-declare -A dependencies=( ["asdf"]="./installs/asdf" ["homebrew"]="./installs/brew" );
+declare -A dependencies=( 
+   ["asdf"]="./installs/asdf"
+   ["homebrew"]="./installs/brew"
+ );
 declare -a deps_orders;
 
 deps_orders+=( "homebrew" )
@@ -60,7 +63,13 @@ else
    done
 fi
 
-declare -A settings=( ["vscode-settings.json"]="$HOME/.config/Code/User/settings.json" ["keybindings.json"]="$HOME/.config/Code/User/keybindings.json" [".zshrc"]="$HOME/.zshrc" [".gitconfig"]="$HOME/.gitconfig" )
+declare -A settings=( 
+   ["vscode-settings.json"]="$HOME/.config/Code/User/settings.json"
+   ["keybindings.json"]="$HOME/.config/Code/User/keybindings.json"
+   [".zshrc"]="$HOME/.zshrc" 
+   [".gitconfig"]="$HOME/.gitconfig"
+)
+
 declare -a settings_orders;
 
 settings_orders+=( "vscode-settings.json" )
@@ -71,4 +80,16 @@ for setting_file in "${settings_orders[@]}"; do
    log info "installing setting $setting_file"
 
    cp $setting_file ${settings[$setting_file]}
+done
+
+log info "installing fonts"
+
+fonts_paths="$HOME/.local/share/fonts"
+mkdir -p $fonts_paths
+
+for font in ./fonts/*.ttf
+do
+   log info "installing font $font"
+
+   cp $font $fonts_paths
 done
