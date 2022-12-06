@@ -1,84 +1,10 @@
-export ZSH="/home/peam/.oh-my-zsh"
-export PATH=$PATH:/usr/local/go/bin
+export ZSH="$HOME/.oh-my-zsh"
 
-ZSH_THEME="spaceship"
-
-RED="\033[1;31m"
-YELLOW="\033[1;33m"
-GREEN="\033[1;32m"
-NOCOLOR="\033[0m"
+ZSH_THEME="robbyrussell"
 
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
-
-if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
-        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-        print -P "%F{160}▓▒░ The clone has failed.%f%b"
-fi
-
-source "$HOME/.zinit/bin/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-
-zinit light zsh-users/zsh-autosuggestions
-zinit light zsh-users/zsh-completions
-zinit light zdharma/fast-syntax-highlighting
-
-LS_COLORS=$LS_COLORS:'ow=01;34:' ; export LS_COLORS
-
-SPACESHIP_PROMPT_ORDER=(
-  user      
-  dir           
-  host  
-  git        
-  package
-  pyenv
-  exec_time     
-  line_sep  
-  battery    
-  vi_mode       
-  jobs          
-  exit_code     
-  char          
-)
-
-SPACESHIP_USER_SHOW="false"
-
-SPACESHIP_DIR_SUFFIX=" "
-SPACESHIP_GIT_PREFIX="➜ "
-
-SPACESHIP_GIT_STATUS_SHOW=false
-SPACESHIP_PROMPT_ADD_NEWLINE=false
-SPACESHIP_PROMPT_SEPARATE_LINE=false 
-
-SPACESHIP_PROMPT_PREFIXES_SHOW=true
-SPACESHIP_PROMPT_SUFFIXES_SHOW=true
-SPACESHIP_PROMPT_DEFAULT_PREFIX="via "
-SPACESHIP_PROMPT_DEFAULT_SUFFIX=" "
-
-SPACESHIP_PACKAGE_PREFIX=""
-SPACESHIP_PACKAGE_COLOR="215"
-
-SPACESHIP_EXIT_CODE_SYMBOL="✘ "
-SPACESHIP_EXIT_CODE_SHOW="true"
-SPACESHIP_CHAR_SYMBOL="❯"
-SPACESHIP_CHAR_SUFFIX=" "
-
-unsetopt PROMPT_SP
-
-export PATH="$PATH:/opt/yarn-[version]/bin"
-export PATH="$PATH:/linuxbrew/.linuxbrew/bin/brew"
-export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
-
-. $HOME/.asdf/asdf.sh
-
-alias -g zshconfig="code ~/.zshrc"
 
 function fpush() {
    branch=`git branch --show-current`
@@ -117,13 +43,11 @@ function commit() {
    fi
 }
 
-
 function checkout() {
    git checkout master
    git pull --rebase --quiet
    git branch | xargs git branch -D
 }
-
 
 function chrome-dev() {
    echo "${GREEN}Running chrome in dev mode...${NOCOLOR}"
