@@ -54,20 +54,21 @@ fi
 if [[ ${options[skip-dependencies]} != true ]]; then
    log info "installing dependencies"
 
-
    declare -A dependencies=( 
       ["asdf"]="./installs/asdf"
       ["homebrew"]="./installs/brew"
+      ["code"]="./installs/code"
    );
    declare -a deps_orders;
 
    deps_orders+=( "homebrew" )
    deps_orders+=( "asdf" )
+   deps_orders+=( "code" )
 
    for dep in "${deps_orders[@]}"; do 
       log info "trying to install $dep"
 
-      which $dep
+      exists=$(which $dep)
       check_install_exit=$?
 
       if [ $check_install_exit -ne 0 ] ;then
