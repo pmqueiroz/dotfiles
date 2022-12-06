@@ -100,7 +100,7 @@ if [[ ${options[skip-settings]} != true ]]; then
    for setting_file in "${settings_orders[@]}"; do 
       log info "installing setting $setting_file"
 
-      cp $setting_file ${settings[$setting_file]}
+      cp settings/$setting_file ${settings[$setting_file]}
    done
 else
    log info "skip dependencies install"
