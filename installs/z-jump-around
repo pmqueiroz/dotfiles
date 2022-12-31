@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo "$(curl -fsSL https://raw.githubusercontent.com/rupa/z/master/z.sh)" > /usr/bin/zjumparound

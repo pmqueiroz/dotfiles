@@ -38,6 +38,7 @@ if [[ ${options[skip-dependencies]} != true ]]; then
       ["node"]="./installs/node"
       ["dconf"]="./installs/dconf"
       ["gnome-terminal-profile"]="./installs/gnome-terminal-profile"
+      ["z-jump-around"]="./installs/z-jump-around"
    );
    declare -a deps_orders;
 
@@ -45,7 +46,7 @@ if [[ ${options[skip-dependencies]} != true ]]; then
    deps_orders+=( "asdf" )
    deps_orders+=( "code" )
    deps_orders+=( "code-extensions" )
-   deps_orders+=( "zsh" )
+   # deps_orders+=( "zsh" )
    deps_orders+=( "pnpm" )
    deps_orders+=( "node" )
    deps_orders+=( "dconf" )
@@ -75,13 +76,14 @@ if [[ ${options[skip-settings]} != true ]]; then
       ["keybindings.json"]="$HOME/.config/Code/User/keybindings.json"
       [".zshrc"]="$HOME/.zshrc" 
       [".gitconfig"]="$HOME/.gitconfig"
+      ["bash-commands"]="/usr/bin/peam-commands/"
    )
 
    declare -a settings_orders;
 
    settings_orders+=( "vscode-settings.json" )
    settings_orders+=( "keybindings.json" )
-   settings_orders+=( ".zshrc" )
+   # settings_orders+=( ".zshrc" )
 
    for setting_file in "${settings_orders[@]}"; do 
       log info "installing setting $setting_file"
@@ -89,5 +91,16 @@ if [[ ${options[skip-settings]} != true ]]; then
       cp settings/$setting_file ${settings[$setting_file]}
    done
 else
-   log info "skip dependencies install"
+   log info "skip settings install"
+fi
+
+if [[ ${options[skip-sources]} != true ]]; then
+   if ! has_installed_sources_before; then
+      log action "adding sources to bash config file"
+      cat sources >> "$HOME/.bashrc"
+   else
+      log info "skip bash sources"
+   fi
+else
+   log info "skip bash sources"
 fi

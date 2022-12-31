@@ -1,0 +1,7 @@
+
+#########################
+# INSTALLED_BY_DOTFILES #
+#########################
+source /usr/bin/zjumparound
+source /usr/bin/peam-commands
+##########################
