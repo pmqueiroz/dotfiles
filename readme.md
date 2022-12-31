@@ -28,3 +28,5 @@ Before running this script make sure you have the following installed:
 | --skip-settings | skip settings install |
 | --skip-dependencies | skip dependencies install |
 | --skip-fonts | skip fonts install |
+| --skip-sources | skip sources adds to bash config |
+
