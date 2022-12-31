@@ -20,7 +20,7 @@ Before running this script make sure you have the following installed:
 ```sh
    $ bash install
 ```
-> **Warning** this script is set up to runs on Debian based distros (that uses apt as package manager) and uses Gnome Shell, running on another linux distribution or with another interface might cause errors
+> **Warning** this script is set up to runs on Debian based distros (that uses apt as package manager and has apt-get installed) and uses Gnome Shell, running on another linux distribution or with another interface might cause errors
 
 | option  |          description             |
 |---------|----------------------------------|
