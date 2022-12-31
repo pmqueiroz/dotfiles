@@ -1,35 +1,7 @@
 #!/bin/bash
-GREEN="\u001b[32m"
-MAGENTA="\u001b[35m"
-CYAN="\u001b[36m"
-YELLOW="\033[33m"
-RESET="\033[0m"
-RED="\033[0;31m"
+source helpers
 
-declare -A options;
-
-# load options
-for opt in $@; do 
-   if [[ $opt == --* ]]; then
-      options[${opt:2}]=true
-   fi
-done
-
-upper() {
-   echo $1 | tr '[:lower:]' '[:upper:]'
-}
-
-log() {
-   declare -A levels=( ["info"]="$CYAN" ["error"]="$RED" ["action"]="$MAGENTA" )
-   log_level=$1
-
-   if [[ ${options[quiet]} == true ]] && [[ $log_level != "error" ]] ; then
-      return 125 # operation canceled code
-   fi
-
-   display_level=$(upper $log_level)
-   printf "${levels[$log_level]}[$display_level]$RESET ${@:2}\n\n"
-}
+load_options $@
 
 log info "starting setup"
 
@@ -41,12 +13,14 @@ if [[ ${options[skip-fonts]} != true ]]; then
 
    for font in ./fonts/*.ttf
    do
-      log info "installing font $font"
+      log action "installing font $font"
 
       cp $font $fonts_paths
    done
 
-   fc-cache -f -v
+   log action "restarting fonts cache"
+
+   fc-cache -f -v > /dev/null
 else
    log info "skip fonts install"
 fi
@@ -62,6 +36,8 @@ if [[ ${options[skip-dependencies]} != true ]]; then
       ["zsh"]="./installs/zsh"
       ["pnpm"]="./installs/pnpm"
       ["node"]="./installs/node"
+      ["dconf"]="./installs/dconf"
+      ["gnome-terminal-profile"]="./installs/gnome-terminal-profile"
    );
    declare -a deps_orders;
 
@@ -72,6 +48,8 @@ if [[ ${options[skip-dependencies]} != true ]]; then
    deps_orders+=( "zsh" )
    deps_orders+=( "pnpm" )
    deps_orders+=( "node" )
+   deps_orders+=( "dconf" )
+   deps_orders+=( "gnome-terminal-profile" )
 
    for dep in "${deps_orders[@]}"; do 
       log info "trying to install $dep"
