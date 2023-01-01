@@ -23,6 +23,9 @@ Before running this script make sure you have the following installed:
 ### Run
 
 ```sh
+   $ sudo apt update
+   $ sudo apt upgrade
+   # now run the commands above that I know you skipped
    $ bash install
 ```
 > **Warning** This script must be used in a sudoer user, otherwise it will not work at all.
