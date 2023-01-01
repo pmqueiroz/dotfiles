@@ -49,6 +49,7 @@ if [[ ${options[skip-dependencies]} != true ]]; then
    deps_orders+=( "node" )
    deps_orders+=( "dconf" )
    deps_orders+=( "gnome-terminal-profile" )
+   deps_orders+=( "z-jump-around" )
 
    for dep in "${deps_orders[@]}"; do 
       log info "trying to install $dep"
