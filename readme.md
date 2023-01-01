@@ -19,16 +19,16 @@ Before running this script make sure you have the following installed:
    * A Distro based on [Debian][debian-url] with [Aptitude][aptitude-url] Package Manager
 
 ```sh
-   $ apt install curl git
+$ apt install curl git
 ```
 
 ### Run
 
 ```sh
-   $ sudo apt update
-   $ sudo apt upgrade
-   # now run the commands above that I know you skipped
-   $ bash install
+$ sudo apt update
+$ sudo apt upgrade
+# now run the commands above that I know you skipped
+$ bash install
 ```
 > **Warning** This script must be used in a sudoer user, otherwise it will not work at all.
 
@@ -50,3 +50,27 @@ Before running this script make sure you have the following installed:
 | -------|---------|
 | Kali Linux | 2022.4 |
 | Ubuntu | 22.04 |
+
+### Authenticate
+
+There is an another script to authenticate the machine with github, generating SSH keys and etc.
+
+#### Run
+
+```sh
+# inside the dotfiles clone
+$ bash authenticate.sh
+
+# or even without clone anything
+$ bash -c "$(curl -fsSL https://raw.githubusercontent.com/pmqueiroz/dotfiles/master/authenticate.sh)"
+```
+
+To skip interactions you can simply run:
+
+```sh
+$ bash authenticate.sh << EOF
+> YOUR_EMAIL
+> YOUR_USERNAME
+> YOUR_PERSONAL_ACCESS_TOKEN
+> EOF
+```
