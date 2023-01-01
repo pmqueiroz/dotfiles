@@ -1,6 +1,8 @@
 <!-- VARS -->
 [git-url]: https://git-scm.com/
 [curl-url]: https://curl.se/
+[aptitude-url]: https://wiki.debian.org/Aptitude
+[debian-url]: https://www.debian.org/
 <!-- END_VARS -->
 
 <div align="center" >
@@ -14,7 +16,7 @@
 Before running this script make sure you have the following installed:
    * [Git][git-url]
    * [Curl][curl-url]
-   * A Distro based on Debian with Apitude Package Manager
+   * A Distro based on [Debian][debian-url] with [Aptitude][aptitude-url] Package Manager
 
 ```sh
    $ apt install curl git
