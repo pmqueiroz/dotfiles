@@ -76,7 +76,7 @@ if [[ ${options[skip-settings]} != true ]]; then
       ["keybindings.json"]="$HOME/.config/Code/User/keybindings.json"
       [".zshrc"]="$HOME/.zshrc" 
       [".gitconfig"]="$HOME/.gitconfig"
-      ["bash-commands"]="/usr/bin/peam-commands/"
+      ["bash-commands"]="/usr/bin/peam-commands"
    )
 
    declare -a settings_orders;
@@ -84,11 +84,14 @@ if [[ ${options[skip-settings]} != true ]]; then
    settings_orders+=( "vscode-settings.json" )
    settings_orders+=( "keybindings.json" )
    # settings_orders+=( ".zshrc" )
+   settings_orders+=( "bash-commands" )
+
+   sudo sleep 0; # just for grab previous permissions
 
    for setting_file in "${settings_orders[@]}"; do 
-      log info "installing setting $setting_file"
+      log action "installing setting $setting_file"
 
-      cp settings/$setting_file ${settings[$setting_file]}
+      sudo cp settings/$setting_file ${settings[$setting_file]}
    done
 else
    log info "skip settings install"
