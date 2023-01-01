@@ -19,7 +19,7 @@ Before running this script make sure you have the following installed:
 ```sh
 # run this to get the requirements
 
-apt install curl git
+   $ apt install curl git
 ```
 
 ### Run
