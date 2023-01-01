@@ -14,13 +14,14 @@
 Before running this script make sure you have the following installed:
    * [Git][git-url]
    * [Curl][curl-url]
+   * A Distro based on Debian with Apitude and Gnome Shell
 
 ### Run
 
 ```sh
    $ bash install
 ```
-> **Warning** this script is set up to runs on Debian based distros (that uses apt as package manager and has apt-get installed) and uses Gnome Shell, running on another linux distribution or with another interface might cause errors
+> **Warning** This script must be used in a sudoer user, otherwise it will not work at all.
 
 | option  |          description             |
 |---------|----------------------------------|
@@ -29,4 +30,3 @@ Before running this script make sure you have the following installed:
 | --skip-dependencies | skip dependencies install |
 | --skip-fonts | skip fonts install |
 | --skip-sources | skip sources adds to bash config |
-
