@@ -14,7 +14,7 @@
 Before running this script make sure you have the following installed:
    * [Git][git-url]
    * [Curl][curl-url]
-   * A Distro based on Debian with Apitude and Gnome Shell
+   * A Distro based on Debian with Apitude Package Manager
 
 ```sh
    $ apt install curl git
