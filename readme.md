@@ -17,8 +17,6 @@ Before running this script make sure you have the following installed:
    * A Distro based on Debian with Apitude and Gnome Shell
 
 ```sh
-# run this to get the requirements
-
    $ apt install curl git
 ```
 
