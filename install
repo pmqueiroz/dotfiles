@@ -44,7 +44,6 @@ if [[ ${options[skip-dependencies]} != true ]]; then
    deps_orders+=( "asdf" )
    deps_orders+=( "code" )
    deps_orders+=( "code-extensions" )
-   # deps_orders+=( "zsh" )
    deps_orders+=( "pnpm" )
    deps_orders+=( "node" )
    deps_orders+=( "dconf" )

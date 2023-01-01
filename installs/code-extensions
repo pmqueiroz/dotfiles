@@ -1,21 +1,32 @@
 #!/bin/bash
+source helpers
 
 declare -a extensions;
 
 extensions+=( "naumovs.color-highlight" )
 extensions+=( "dracula-theme.theme-dracula" )
+extensions+=( "DaltonMenezes.aura-theme" )
 extensions+=( "pkief.material-icon-theme" )
-extensions+=( "ritwickdey.liveserver" )
-extensions+=( "icrawl.discord-vscode" )
-extensions+=( "jpoissonnier.vscode-styled-components" )
+extensions+=( "styled-components.vscode-styled-components" )
 extensions+=( "wix.vscode-import-cost" )
 extensions+=( "streetsidesoftware.code-spell-checker" )
+extensions+=( "streetsidesoftware.code-spell-checker-portuguese-brazilian" )
 extensions+=( "eamodio.gitlens" )
-extensions+=( "firsttris.vscode-jest-runner" )
 extensions+=( "moyu.snapcode" )
 extensions+=( "GitHub.copilot" )
 extensions+=( "formulahendry.auto-rename-tag" )
 
-for ext in "${extensions[@]}"; do 
-    code --install-extension $ext
+installed_extensions=$(code --list-extensions)
+
+for ext in "${extensions[@]}"; do
+    log action "trying to install $ext"
+
+    echo "${installed_extensions[@]}" | grep -iq $ext
+    already_installed=$?
+
+    if [[ $already_installed -ne 0 ]]; then
+        code --install-extension $ext
+    else
+        log info "code extension $ext already installed. skipping"
+    fi
 done
