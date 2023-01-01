@@ -95,13 +95,12 @@ else
    log info "skip settings install"
 fi
 
-if [[ ${options[skip-sources]} != true ]]; then
-   if ! has_installed_sources_before; then
-      log action "adding sources to bash config file"
-      cat sources >> "$HOME/.bashrc"
-   else
-      log info "skip bash sources"
-   fi
+has_installed_sources_before
+has_installed=$?
+
+if [[ $has_installed -ne 0 ]] && [[ ${options[skip-sources]} != true ]]; then
+   log action "adding sources to bash config file"
+   cat sources >> "$HOME/.bashrc"
 else
    log info "skip bash sources"
 fi
