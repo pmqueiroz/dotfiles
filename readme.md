@@ -30,6 +30,8 @@ Before running this script make sure you have the following installed:
 ```
 > **Warning** This script must be used in a sudoer user, otherwise it will not work at all.
 
+### Options
+
 | option  |          description             |
 |---------|----------------------------------|
 | --quiet | skip all logs except error level |
