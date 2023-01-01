@@ -38,6 +38,7 @@ if [[ ${options[skip-dependencies]} != true ]]; then
       ["dconf"]="./installs/dconf"
       ["gnome-terminal-profile"]="./installs/gnome-terminal-profile"
       ["z-jump-around"]="./installs/z-jump-around"
+      ["rg"]="./installs/ripgrep"
    );
    declare -a deps_orders;
 
@@ -49,6 +50,7 @@ if [[ ${options[skip-dependencies]} != true ]]; then
    deps_orders+=( "dconf" )
    deps_orders+=( "gnome-terminal-profile" )
    deps_orders+=( "z-jump-around" )
+   deps_orders+=( "rg" )
 
    for dep in "${deps_orders[@]}"; do 
       log info "trying to install $dep"
