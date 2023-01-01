@@ -41,3 +41,12 @@ Before running this script make sure you have the following installed:
 | --skip-dependencies | skip dependencies install |
 | --skip-fonts | skip fonts install |
 | --skip-sources | skip sources adds to bash config |
+
+### Tested on
+
+##### Distros that I have used this script to setup
+
+| distro | version |
+| -------|---------|
+| Kali Linux | 2022.4 |
+| Ubuntu | 22.04 |
