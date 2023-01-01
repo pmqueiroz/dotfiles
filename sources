@@ -4,4 +4,7 @@
 #########################
 source /usr/bin/zjumparound
 source /usr/bin/peam-commands
+
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
 ##########################

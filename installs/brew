@@ -1,7 +1,0 @@
-#!/bin/bash
-
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-sudo echo '# Set PATH, MANPATH, etc., for Homebrew.' >> $HOME/.profile
-sudo echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.profile
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"

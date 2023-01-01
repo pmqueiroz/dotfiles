@@ -30,7 +30,6 @@ if [[ ${options[skip-dependencies]} != true ]]; then
 
    declare -A dependencies=( 
       ["asdf"]="./installs/asdf"
-      ["homebrew"]="./installs/brew"
       ["code"]="./installs/code"
       ["code-extensions"]="./installs/code-extensions"
       ["zsh"]="./installs/zsh"
@@ -42,7 +41,6 @@ if [[ ${options[skip-dependencies]} != true ]]; then
    );
    declare -a deps_orders;
 
-   deps_orders+=( "homebrew" )
    deps_orders+=( "asdf" )
    deps_orders+=( "code" )
    deps_orders+=( "code-extensions" )
