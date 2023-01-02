@@ -81,3 +81,4 @@ $ bash authenticate.sh << EOF
 |---------|----------------------------------|
 | --skip-ssh | skip setting ssh key to github |
 | --skip-npm-token | skip setting personal access token to npm user |
+| --skip-git-configuring | skip configuring git |
