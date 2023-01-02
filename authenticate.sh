@@ -42,13 +42,25 @@ else
 fi
 
 if [[ ${options[skip-git-configuring]} != true ]]; then
-   log info "generating gpg key"
+   log info "generating gpg key enter the passphrase"
 
-   gpg --full-generate-key
+   tmp_key_config=$(mktemp)
 
-   last_generated_gpg=$(gpg --list-secret-keys --keyid-format=long | perl -lne 'print $1 if /sec\s+rsa4096\/([0-9A-Z]{16} )/') | tail -n 1
+   cat >> $tmp_key_config << EOF
+   Key-Type: 1
+   Key-Length: 4096
+   Subkey-Type: 1
+   Subkey-Length: 4096
+   Name-Real: $user_name
+   Name-Email: $user_email
+   Expire-Date: 0
+EOF
+
+   gpg --batch --gen-key $tmp_key_config
+
+   generated_gpg=$(gpg --list-secret-keys --keyid-format=long | perl -lne 'print $1 if /sec\s+rsa4096\/([0-9A-Z]{16} )/' | tail -n 1)
    
-   exported_gpg=$(gpg --armor --export $last_generated_gpg)
+   exported_gpg=$(gpg --armor --export $generated_gpg)
 
    log info "now you can add this gpg to$GREEN https://github.com/settings/gpg/new$RESET"
 
