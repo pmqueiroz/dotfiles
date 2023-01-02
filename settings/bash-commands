@@ -68,7 +68,7 @@ function checkout() {
       branch_to_checkout="$1"
    fi
 
-   if [ $current_branch != branch_to_checkout ]; then
+   if [ $current_branch != $branch_to_checkout ]; then
       git checkout $branch_to_checkout
    fi
 
