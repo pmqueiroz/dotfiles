@@ -1,5 +1,5 @@
 #!/bin/bash
-source helpers
+source helpers.sh
 
 load_options $@
 
@@ -29,16 +29,16 @@ if [[ ${options[skip-dependencies]} != true ]]; then
    log info "installing dependencies"
 
    declare -A dependencies=( 
-      ["asdf"]="./installs/asdf"
-      ["code"]="./installs/code"
-      ["code-extensions"]="./installs/code-extensions"
-      ["zsh"]="./installs/zsh"
-      ["pnpm"]="./installs/pnpm"
-      ["node"]="./installs/node"
-      ["dconf"]="./installs/dconf"
-      ["gnome-terminal-profile"]="./installs/gnome-terminal-profile"
-      ["z-jump-around"]="./installs/z-jump-around"
-      ["rg"]="./installs/ripgrep"
+      ["asdf"]="./installs/asdf.sh"
+      ["code"]="./installs/code.sh"
+      ["code-extensions"]="./installs/code-extensions.sh"
+      ["zsh"]="./installs/zsh.sh"
+      ["pnpm"]="./installs/pnpm.sh"
+      ["node"]="./installs/node.sh"
+      ["dconf"]="./installs/dconf.sh"
+      ["gnome-terminal-profile"]="./installs/gnome-terminal-profile.sh"
+      ["z-jump-around"]="./installs/z-jump-around.sh"
+      ["rg"]="./installs/ripgrep.sh"
    );
    declare -a deps_orders;
 

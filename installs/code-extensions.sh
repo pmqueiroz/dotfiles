@@ -1,5 +1,5 @@
 #!/bin/bash
-source helpers
+source helpers.sh
 
 declare -a extensions;
 
