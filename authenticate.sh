@@ -46,9 +46,9 @@ if [[ ${options[skip-git-configuring]} != true ]]; then
 
    gpg --full-generate-key
 
-   generated_gpg=$(gpg --list-secret-keys --keyid-format=long | perl -lne 'print $1 if /sec\s+rsa4096\/([0-9A-Z]{16} )/')
+   last_generated_gpg=$(gpg --list-secret-keys --keyid-format=long | perl -lne 'print $1 if /sec\s+rsa4096\/([0-9A-Z]{16} )/') | tail -n 1
    
-   exported_gpg=$(gpg --armor --export $generated_gpg)
+   exported_gpg=$(gpg --armor --export $last_generated_gpg)
 
    log info "now you can add this gpg to$GREEN https://github.com/settings/gpg/new$RESET"
 
