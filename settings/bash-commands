@@ -59,6 +59,19 @@ function checkout() {
    git branch | xargs git branch -D
 }
 
+function checkout() {
+   if test -z "$1"
+   then
+      branch_to_checkout=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')
+   else
+      branch_to_checkout="$1"
+   fi
+
+   git checkout $branch_to_checkout
+   git pull --rebase --quiet
+   git branch | xargs git branch -D
+}
+
 function git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
