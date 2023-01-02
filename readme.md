@@ -42,15 +42,6 @@ $ bash install.sh
 | --skip-fonts | skip fonts install |
 | --skip-sources | skip sources adds to bash config |
 
-### Tested on
-
-##### Distros that I have used this script to setup
-
-| distro | version |
-| -------|---------|
-| Kali Linux | 2022.4 |
-| Ubuntu | 22.04 |
-
 ### Authenticate
 
 There is an another script to authenticate the machine with github, generating SSH keys and etc.
@@ -82,3 +73,12 @@ EOF
 | --skip-ssh | skip setting ssh key to github |
 | --skip-npm-token | skip setting personal access token to npm user |
 | --skip-git-configuring | skip configuring git |
+
+### Tested on
+
+##### Distros that I have used this script to setup
+
+| distro | version |
+| -------|---------|
+| Kali Linux | 2022.4 |
+| Ubuntu | 22.04 |
