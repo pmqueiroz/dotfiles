@@ -69,10 +69,10 @@ To skip interactions you can simply run:
 
 ```sh
 $ bash authenticate.sh << EOF
-> YOUR_EMAIL
-> YOUR_USERNAME
-> YOUR_PERSONAL_ACCESS_TOKEN
-> EOF
+YOUR_EMAIL
+YOUR_USERNAME
+YOUR_PERSONAL_ACCESS_TOKEN
+EOF
 ```
 
 #### Options
