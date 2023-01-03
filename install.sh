@@ -86,7 +86,7 @@ if [[ ${options[skip-settings]} != true ]]; then
    settings_orders+=( "bash-commands" )
    settings_orders+=( "inputrc" )
 
-   sudo sleep 0; # just for grab previous permissions
+   sudo -v; # just for grab previous permissions
 
    for setting_file in "${settings_orders[@]}"; do 
       log action "installing setting $setting_file"
