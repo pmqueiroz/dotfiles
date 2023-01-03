@@ -16,7 +16,7 @@ jobs:
         run: bash install.sh
       - name: Authenticate
         run: |
-        bash authenticate.sh --skip-npm-token << EOF
-        pedroqueiroz593@gmail.com
-        pmqueiroz
-        EOF
+          bash authenticate.sh --skip-npm-token << EOF
+          pedroqueiroz593@gmail.com
+          pmqueiroz
+          EOF
