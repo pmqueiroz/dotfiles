@@ -1,7 +1,31 @@
 #!/bin/bash
 
+GREEN="\u001b[32m"
+MAGENTA="\u001b[35m"
+CYAN="\u001b[36m"
+YELLOW="\033[33m"
+RESET="\033[0m"
+RED="\033[0;31m"
+
 alias glo='git log --oneline'
 alias ..="cd .." # TODO try to get the same behavior as zsh
+
+
+function upper() {
+   echo $1 | tr '[:lower:]' '[:upper:]'
+}
+
+function log() {
+   declare -A levels=( ["info"]="$CYAN" ["error"]="$RED" ["action"]="$MAGENTA" ["ask"]="$YELLOW" )
+   log_level=$1
+
+   if [[ ${options[quiet]} == true ]] && [[ $log_level != "error" ]] ; then
+      return 125 # operation canceled code
+   fi
+
+   display_level=$(upper $log_level)
+   printf "${levels[$log_level]}[$display_level]$RESET ${@:2}\n\n"
+}
 
 function fpush() {
    branch=`git branch --show-current`
@@ -12,10 +36,11 @@ function fpush() {
 
 function commit() {
    git add .
-   files=`git diff --name-only --cached`
-   echo "commiting files:"
-   echo
-   echo "${GREEN}${files}${NOCOLOR}"
+   log info "commiting files"
+
+   printf "$GREEN"
+   git diff --name-only --cached
+   printf "\n$RESET"
 
    inputed_message="$1"
    shift
@@ -28,29 +53,19 @@ function commit() {
       commitmsg="$inputed_message"
    fi
    
-   echo "with message ${GREEN}${commitmsg}${NOCOLOR}"
-   echo "${YELLOW}please confirm${NOCOLOR}"
-
-   function add_commit() {
+   log info "with message$GREEN $commitmsg$RESET"
+   log ask "please confirm [Y/n]"
+   
+   read -p "" -n 1 -r
+   if [[ $REPLY =~ ^[Yy]$ ]]
+   then
       echo
-      git commit -m "${commitmsg}" "$rest_args"
-   }
-
-   function exit_commit() {
+      git commit -m "${commitmsg}" 
+   else
       echo
-      echo "${RED}Exiting...${NOCOLOR}"
+      log error "exiting..."
       git reset
-   }
-
-   PROCEED="Proceed with commit"
-   EXIT_STAGE="Exit and reset staged"
-
-   select yn in "$PROCEED" "$EXIT_STAGE"; do
-      case $yn in
-         "$PROCEED" ) add_commit; break;;
-         "$EXIT_STAGE" ) exit_commit; break;;
-      esac
-   done
+   fi
 }
 
 function checkout() {
