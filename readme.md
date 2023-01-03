@@ -9,6 +9,9 @@
    <img src="./.github/assets/logo_wo_blur.svg" width=300>
 
    _just let the magic happens_
+   
+   [![.github/workflows/test.yaml](https://github.com/pmqueiroz/dotfiles/actions/workflows/test.yaml/badge.svg?branch=master)](https://github.com/pmqueiroz/dotfiles/actions/workflows/test.yaml)
+   
 </div>
 
 ### Requirements
