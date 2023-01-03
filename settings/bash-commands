@@ -18,13 +18,14 @@ function upper() {
 function log() {
    declare -A levels=( ["info"]="$CYAN" ["error"]="$RED" ["action"]="$MAGENTA" ["ask"]="$YELLOW" )
    log_level=$1
-
-   if [[ ${options[quiet]} == true ]] && [[ $log_level != "error" ]] ; then
+   
+   if [[ $QUIETABLE == true ]] && [[ ${options[quiet]} == true ]] && [[ $log_level != "error" ]]; then
       return 125 # operation canceled code
    fi
 
    display_level=$(upper $log_level)
-   printf "${levels[$log_level]}[$display_level]$RESET ${@:2}\n\n"
+
+   printf "${levels[$log_level]}[$display_level]$RESET ${@:2}\n"
 }
 
 function fpush() {

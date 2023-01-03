@@ -3,6 +3,8 @@ source helpers.sh
 
 load_options $@
 
+QUIETABLE=true
+
 log info "starting setup"
 
 if [[ ${options[skip-fonts]} != true ]]; then
