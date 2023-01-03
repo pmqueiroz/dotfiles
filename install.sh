@@ -30,7 +30,7 @@ fi
 if [[ ${options[skip-dependencies]} != true ]]; then
    log info "installing dependencies"
 
-   declare -A dependencies=( asdf
+   declare -A dependencies=(
       ["peam-essentials"]="./installs/peam-essentials.sh"
       ["asdf"]="./installs/asdf.sh"
       ["code"]="./installs/code.sh"
