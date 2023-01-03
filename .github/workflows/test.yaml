@@ -1,0 +1,16 @@
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  on-ubuntu:
+    name: Test On Ubuntu
+    strategy:
+    matrix:
+      distros: [ubuntu-22.04, ubuntu-20.04]
+    runs-on: ${{ matrix.distros }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install
+        run: bash install.sh
