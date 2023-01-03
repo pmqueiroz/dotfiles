@@ -84,7 +84,7 @@ if [[ ${options[skip-settings]} != true ]]; then
    settings_orders+=( "keybindings.json" )
    # settings_orders+=( ".zshrc" )
    settings_orders+=( "bash-commands" )
-   settings_orders+=( "inputrc" )
+   settings_orders+=( ".inputrc" )
 
    sudo -v; # just for grab previous permissions
 
