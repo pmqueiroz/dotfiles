@@ -8,7 +8,7 @@ jobs:
     name: Test On Ubuntu
     strategy:
       matrix:
-        distros: [ubuntu-22.04, ubuntu-20.04]
+        distros: [ubuntu-22.04, ubuntu-20.04, '[self-hosted, kali]']
     runs-on: ${{ matrix.distros }}
     steps:
       - uses: actions/checkout@v3
