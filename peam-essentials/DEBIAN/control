@@ -2,11 +2,10 @@ Section: misc
 Priority: optional
 Homepage: https://pmqueiroz.com
 Standards-Version: 3.9.2
-
 Package: peam-essentials
 Version: 0.1
 Maintainer: Your Name <yourname@example.com>
-Depends: xsel, build-essential, termux, python3-pip
+Depends: xsel, build-essential, termux, python3-pip, ripgrep, dconf-cli
 Recommends: gnome-tweaks, googler, neofetch
 Architecture: all
 Description: Install essentials tools for peam workspace

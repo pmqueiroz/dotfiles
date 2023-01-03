@@ -28,29 +28,27 @@ fi
 if [[ ${options[skip-dependencies]} != true ]]; then
    log info "installing dependencies"
 
-   declare -A dependencies=( 
+   declare -A dependencies=( asdf
+      ["peam-essentials"]="./installs/peam-essentials.sh"
       ["asdf"]="./installs/asdf.sh"
       ["code"]="./installs/code.sh"
       ["code-extensions"]="./installs/code-extensions.sh"
       ["zsh"]="./installs/zsh.sh"
       ["pnpm"]="./installs/pnpm.sh"
       ["node"]="./installs/node.sh"
-      ["dconf"]="./installs/dconf.sh"
       ["gnome-terminal-profile"]="./installs/gnome-terminal-profile.sh"
       ["z-jump-around"]="./installs/z-jump-around.sh"
-      ["rg"]="./installs/ripgrep.sh"
    );
    declare -a deps_orders;
 
+   deps_orders+=( "peam-essentials" )
    deps_orders+=( "asdf" )
    deps_orders+=( "code" )
    deps_orders+=( "code-extensions" )
    deps_orders+=( "pnpm" )
    deps_orders+=( "node" )
-   deps_orders+=( "dconf" )
    deps_orders+=( "gnome-terminal-profile" )
    deps_orders+=( "z-jump-around" )
-   deps_orders+=( "rg" )
 
    for dep in "${deps_orders[@]}"; do 
       log info "trying to install $dep"
