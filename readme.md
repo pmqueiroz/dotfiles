@@ -80,6 +80,6 @@ EOF
 
 | distro | version | manually | ci |
 | -------|---------|----------|----|
-| Kali Linux | 2022.4 | :heavy_check_mark: | :x: |
+| Kali Linux | 2022.4 | :heavy_check_mark: | :heavy_check_mark: |
 | Ubuntu | 22.04 | :heavy_check_mark: | :heavy_check_mark: |
 | Ubuntu | 20.04 | :x: | :heavy_check_mark: |
