@@ -43,6 +43,17 @@ function commit() {
    git diff --name-only --cached
    printf "\n$RESET"
 
+   for opt in $@; do
+      if [[ $opt == -* ]]; then
+         if [[ $opt == --* ]]; then
+            options[${opt:2}]=true
+         else
+            options[${opt:1}]=true
+         fi
+         shift
+      fi
+   done
+
    inputed_message="$1"
    shift
    rest_args="$@"
@@ -53,9 +64,11 @@ function commit() {
    else
       commitmsg="$inputed_message"
    fi
-   
+
    log info "with message$GREEN $commitmsg$RESET"
+
    log ask "please confirm [Y/n]"
+   echo debug
    
    read -p "" -n 1 -r
    if [[ $REPLY =~ ^[Yy]$ ]]
