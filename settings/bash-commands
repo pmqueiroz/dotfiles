@@ -52,6 +52,8 @@ function commit() {
 
    if [[ ${options[skip-add]} != true ]]; then
       git add .
+   else
+      log info "skipping add files"
    fi
 
    log info "commiting files\n"
