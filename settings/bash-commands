@@ -54,12 +54,6 @@ function commit() {
 }
 
 function checkout() {
-   git checkout master
-   git pull --rebase --quiet
-   git branch | xargs git branch -D
-}
-
-function checkout() {
    current_branch=$(git branch --show-current)
 
    if test -z "$1"; then
