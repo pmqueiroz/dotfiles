@@ -72,7 +72,6 @@ if [[ ${options[skip-settings]} != true ]]; then
    declare -A settings=( 
       ["vscode-settings.json"]="$HOME/.config/Code/User/settings.json"
       ["keybindings.json"]="$HOME/.config/Code/User/keybindings.json"
-      [".zshrc"]="$HOME/.zshrc" 
       [".gitconfig"]="$HOME/.gitconfig"
       ["bash-commands"]="/usr/bin/peam-commands"
       [".inputrc"]="$HOME/.inputrc"
@@ -82,7 +81,6 @@ if [[ ${options[skip-settings]} != true ]]; then
 
    settings_orders+=( "vscode-settings.json" )
    settings_orders+=( "keybindings.json" )
-   # settings_orders+=( ".zshrc" )
    settings_orders+=( "bash-commands" )
    settings_orders+=( ".inputrc" )
 
