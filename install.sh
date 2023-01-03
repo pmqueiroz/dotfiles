@@ -91,6 +91,8 @@ if [[ ${options[skip-settings]} != true ]]; then
    for setting_file in "${settings_orders[@]}"; do 
       log action "installing setting $setting_file"
 
+      mkdir -p $(dirname ${settings[$setting_file]})
+
       sudo cp settings/$setting_file ${settings[$setting_file]}
    done
 else
