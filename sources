@@ -7,6 +7,7 @@ source /usr/bin/peam-commands
 source $HOME/.asdf/asdf.sh
 source $HOME/.asdf/completions/asdf.bash
 
-# start tmux when opening terminal
-tmux
+if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+    tmux attach -t default || tmux new -s default
+fi
 ##########################
