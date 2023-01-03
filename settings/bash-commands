@@ -68,7 +68,6 @@ function commit() {
    log info "with message$GREEN $commitmsg$RESET"
 
    log ask "please confirm [Y/n]"
-   echo debug
    
    read -p "" -n 1 -r
    if [[ $REPLY =~ ^[Yy]$ ]]
