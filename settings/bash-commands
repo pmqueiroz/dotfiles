@@ -60,7 +60,7 @@ function commit() {
    if [[ $REPLY =~ ^[Yy]$ ]]
    then
       echo
-      git commit -m "${commitmsg}" 
+      git commit -m "${commitmsg}" $rest_args
    else
       echo
       log error "exiting..."
