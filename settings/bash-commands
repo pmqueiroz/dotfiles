@@ -38,12 +38,11 @@ function fpush() {
 
 function commit() {
    git add .
-
-   printf "commiting files\n\n"
+   log info "commiting files"
 
    printf "$GREEN"
    git diff --name-only --cached
-   printf "$RESET\n"
+   printf "\n$RESET"
 
    for opt in $@; do
       if [[ $opt == -* ]]; then
@@ -67,10 +66,10 @@ function commit() {
       commitmsg="$inputed_message"
    fi
 
-   printf "with message$GREEN $commitmsg$RESET\n\n"
+   log info "with message$GREEN $commitmsg$RESET"
 
-   printf "please confirm [Y/n]: "
-
+   log ask "please confirm [Y/n]"
+   
    read -p "" -n 1 -r
    if [[ $REPLY =~ ^[Yy]$ ]]
    then
@@ -78,7 +77,7 @@ function commit() {
       git commit -m "${commitmsg}" $rest_args
    else
       echo
-      printf "${RED}exiting...$RESET\n"
+      log error "exiting..."
       git reset
    fi
 }
