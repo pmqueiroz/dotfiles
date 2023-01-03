@@ -29,7 +29,8 @@ function log() {
 
 function fpush() {
    branch=`git branch --show-current`
-   echo "pushing and setting upstream to ${GREEN}${branch}${NOCOLOR}"
+   display_branch=$(upper $branch)
+   log info "pushing and setting upstream to $GREEN${display_branch}$RESET"
 
    git push $1 --set-upstream origin $branch $2
 }
