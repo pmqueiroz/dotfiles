@@ -78,7 +78,8 @@ EOF
 
 ##### Distros that I have used this script to setup
 
-| distro | version |
-| -------|---------|
-| Kali Linux | 2022.4 |
-| Ubuntu | 22.04 |
+| distro | version | manually | ci |
+| -------|---------|----------|----|
+| Kali Linux | 2022.4 | :heavy_check_mark: | :x: |
+| Ubuntu | 22.04 | :heavy_check_mark: | :heavy_check_mark: |
+| Ubuntu | 20.04 | :x: | :heavy_check_mark: |
