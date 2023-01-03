@@ -4,7 +4,9 @@
 #########################
 source /usr/bin/zjumparound
 source /usr/bin/peam-commands
+source $HOME/.asdf/asdf.sh
+source $HOME/.asdf/completions/asdf.bash
 
-. $HOME/.asdf/asdf.sh
-. $HOME/.asdf/completions/asdf.bash
+# start tmux when opening terminal
+tmux
 ##########################
