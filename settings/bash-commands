@@ -1,11 +1,12 @@
 #!/bin/bash
 
-GREEN="\u001b[32m"
+GREEN="\[\e[0;32m\]"
 MAGENTA="\u001b[35m"
 CYAN="\u001b[36m"
 YELLOW="\033[33m"
-RESET="\033[0m"
 RED="\033[0;31m"
+BLUE="\[\e[1;34m\]"
+RESET="\033[0m"
 
 alias glo='git log --oneline'
 alias ..="cd .." # TODO try to get the same behavior as zsh
@@ -109,6 +110,19 @@ function git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
 
-DEFAULT_PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]"
+DEFAULT_PS1="\[\e]0;@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]"
 
-export PS1="$DEFAULT_PS1 \$(git_branch) ❯ "
+PROMPT_COMMAND=__prompt_command
+
+function __prompt_command() {
+   local EXIT_CODE="$?"
+   PS1=""
+
+   if [ $EXIT_CODE != 0 ]; then
+      PS1+="${RED}\u${RESET}"
+   else
+      PS1+="${GREEN}\u${RESET}"
+   fi
+
+   PS1+="$DEFAULT_PS1 \$(git_branch) ❯ "
+}
