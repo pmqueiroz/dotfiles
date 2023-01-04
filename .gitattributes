@@ -1,2 +1,2 @@
 *.json linguist-language=jsonc
-*.dconf linguist-language=properties
+*.dconf linguist-language=toml
