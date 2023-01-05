@@ -15,6 +15,7 @@ extensions+=( "eamodio.gitlens" )
 extensions+=( "moyu.snapcode" )
 extensions+=( "GitHub.copilot" )
 extensions+=( "formulahendry.auto-rename-tag" )
+extensions+=( "dbaeumer.vscode-eslint" )
 
 installed_extensions=$(code --list-extensions)
 
