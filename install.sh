@@ -39,7 +39,6 @@ if [[ ${options[skip-dependencies]} != true ]]; then
       ["pnpm"]="./installs/pnpm.sh"
       ["node"]="./installs/node.sh"
       ["gnome-terminal-profile"]="./installs/gnome-terminal-profile.sh"
-      ["z-jump-around"]="./installs/z-jump-around.sh"
    );
    declare -a deps_orders;
 
@@ -50,7 +49,6 @@ if [[ ${options[skip-dependencies]} != true ]]; then
    deps_orders+=( "pnpm" )
    deps_orders+=( "node" )
    deps_orders+=( "gnome-terminal-profile" )
-   deps_orders+=( "z-jump-around" )
 
    for dep in "${deps_orders[@]}"; do 
       log info "trying to install $dep"

@@ -2,7 +2,6 @@
 #########################
 # INSTALLED_BY_DOTFILES #
 #########################
-source /usr/bin/zjumparound
 source /usr/bin/peam-commands
 source $HOME/.asdf/asdf.sh
 source $HOME/.asdf/completions/asdf.bash
