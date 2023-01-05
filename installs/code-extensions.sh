@@ -27,6 +27,6 @@ for ext in "${extensions[@]}"; do
     if [[ $already_installed -ne 0 ]]; then
         code --install-extension $ext
     else
-        log info "code extension $ext already installed. skipping"
+        log error "code extension $ext already installed. skipping"
     fi
 done
