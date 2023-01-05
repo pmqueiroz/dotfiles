@@ -30,13 +30,13 @@ fi
 
 if [[ ${options[skip-npm-token]} != true ]]; then
    log info "creating npm token auth"
-   log ask "generate a new token in $GREEN\\https://github.com/settings/tokens/new$RESET"
+   log ask "generate a new token in $GREEN\\https://github.com/settings/tokens/new${RESET}"
 
    log ask "input your generated password:"
    read inputed_password
    echo
 
-   npx npm-cli-login -u $user_name -p inputed_password -e $user_email
+   npx npm-cli-login -u $user_name -p inputed_password -e $user_email -r https://npm.pkg.github.com
 else
    log info "skipping npm token auth"
 fi
