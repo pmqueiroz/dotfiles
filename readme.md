@@ -43,6 +43,7 @@ $ bash install.sh
 | --skip-settings | skip settings install |
 | --skip-dependencies | skip dependencies install |
 | --skip-fonts | skip fonts install |
+| --skip-icons | skip icons install |
 | --skip-sources | skip sources adds to bash config |
 
 ### Authenticate

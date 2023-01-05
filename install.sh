@@ -7,6 +7,10 @@ QUIETABLE=true
 
 log info "starting setup"
 
+if [[ ! -d "tmp/reversal" ]];then
+   mkdir ./tmp
+fi
+
 if [[ ${options[skip-fonts]} != true ]]; then
    log info "installing fonts"
 
@@ -25,6 +29,18 @@ if [[ ${options[skip-fonts]} != true ]]; then
    fc-cache -f -v > /dev/null
 else
    log info "skip fonts install"
+fi
+
+if [[ ${options[skip-icons]} != true ]]; then
+   if [[ -d "tmp/reversal" ]];then
+      rm -rf tmp/reversal
+   fi
+
+   git clone https://github.com/yeyushengfan258/Reversal-icon-theme.git ./tmp/reversal --depth=1
+
+   bash tmp/reversal/install.sh -purple
+else
+   log info "skip icons install"
 fi
 
 if [[ ${options[skip-dependencies]} != true ]]; then
