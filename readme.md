@@ -40,10 +40,10 @@ $ bash install.sh
 | option  |          description             |
 |---------|----------------------------------|
 | --quiet | skip all logs except error level |
-| --skip-settings | skip settings install |
-| --skip-dependencies | skip dependencies install |
 | --skip-fonts | skip fonts install |
 | --skip-icons | skip icons install |
+| --skip-dependencies | skip dependencies install |
+| --skip-settings | skip settings install |
 | --skip-sources | skip sources adds to bash config |
 
 ### Authenticate
