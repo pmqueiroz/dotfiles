@@ -12,6 +12,14 @@ RESET="\033[0m"
 alias glo='git log --oneline'
 alias ..="cd .." # TODO try to get the same behavior as zsh
 
+function branch_name() {
+   echo $1 | awk '{gsub(": ","/"); print}' | awk '{gsub(" ", "-"); print}'
+}
+
+function commit_title() {
+   echo $1 | awk '{gsub("/",": "); print}' | awk '{gsub("-"," "); print}'
+}
+
 function upper() {
    echo $1 | tr '[:lower:]' '[:upper:]'
 }
@@ -68,7 +76,7 @@ function commit() {
 
    if test -z "$inputed_message"
    then
-      commitmsg=`git branch --show-current | awk '{gsub("/",": "); print}' | awk '{gsub("-"," "); print}'`
+      commitmsg=`commit_title $(git branch --show-current)`
    else
       commitmsg="$inputed_message"
    fi
