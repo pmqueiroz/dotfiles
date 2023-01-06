@@ -36,7 +36,7 @@ if [[ ${options[skip-npm-token]} != true ]]; then
    read inputed_password
    echo
 
-   npx npm-cli-login -u $user_name -p inputed_password -e $user_email -r https://npm.pkg.github.com
+   npx npm-cli-login -u $user_name -p $inputed_password -e $user_email -r https://npm.pkg.github.com
 else
    log info "skipping npm token auth"
 fi
