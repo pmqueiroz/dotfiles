@@ -12,8 +12,6 @@ jobs:
     runs-on: ${{ matrix.distros }}
     steps:
       - uses: actions/checkout@v3
-      - name: Update
-        run: sudo apt update
       - name: Install
         run: bash install.sh
       - name: Authenticate
