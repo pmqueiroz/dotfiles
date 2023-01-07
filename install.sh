@@ -51,8 +51,8 @@ else
    log info "skip fonts install"
 fi
 
-if [[ ${options[skip-icons]} != true ]]; then
-   if [[ -d "tmp/reversal" ]];then
+if [[ ${options[skip-adornments]} != true ]]; then
+   if [[ -d "tmp" ]];then
       rm -rf tmp/reversal
    fi
 
@@ -61,6 +61,10 @@ if [[ ${options[skip-icons]} != true ]]; then
    bash tmp/reversal/install.sh -purple
 
    gsettings set org.gnome.desktop.interface icon-theme "Reversal-purple-dark"
+
+   cp background.jpg /usr/share/backgrounds/dotfiles-background.jpg
+
+   gsettings set org.gnome.desktop.background picture-uri file:////usr/share/backgrounds/dotfiles-background.jpg
 else
    log info "skip icons install"
 fi

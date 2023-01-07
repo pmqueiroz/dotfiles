@@ -41,7 +41,7 @@ $ bash install.sh
 |---------|----------------------------------|
 | --quiet | skip all logs except error level |
 | --skip-fonts | skip fonts install |
-| --skip-icons | skip icons install |
+| --skip-adornments | skip icons and background install |
 | --skip-dependencies | skip dependencies install |
 | --skip-settings | skip settings install |
 | --skip-sources | skip sources adds to bash config |
