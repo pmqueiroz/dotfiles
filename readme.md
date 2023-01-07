@@ -53,11 +53,7 @@ There is an another script to authenticate the machine with github, generating S
 #### Run
 
 ```sh
-# inside the dotfiles clone
 $ bash authenticate.sh
-
-# or even without clone anything
-$ bash -c "$(curl -fsSL https://raw.githubusercontent.com/pmqueiroz/dotfiles/master/authenticate.sh)"
 ```
 
 To skip interactions you can simply run:
