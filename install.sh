@@ -5,17 +5,9 @@ load_options $@
 
 QUIETABLE=true
 
-history 25 | grep -q "apt update"
-has_run_update_recently=$?
+log_card info "starting setup - do not forget to run apt update before running this script"
 
-# only check if not running on CI
-if [[ -z $CI ]] && [[ $has_run_update_recently -ne 0 ]]; then
-   log_card error "you didn't run apt update recently, please do not skip this step"
-   echo
-   exit 1
-fi
-
-log_card info "starting setup - peam dotfiles"
+exit 0
 
 if [[ ! -d "tmp" ]];then
    mkdir ./tmp
