@@ -4,8 +4,8 @@ on:
       - master
 
 jobs:
-  on-ubuntu:
-    name: Test On Ubuntu
+  test-install:
+    name: Test Install
     strategy:
       matrix:
         distros: [ubuntu-22.04, ubuntu-20.04, self-hosted]
