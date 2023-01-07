@@ -59,14 +59,14 @@ if [[ ${options[skip-dependencies]} != true ]]; then
    log info "installing dependencies"
 
    declare -A dependencies=(
-      ["peam-essentials"]="./installs/peam-essentials.sh"
-      ["asdf"]="./installs/asdf.sh"
-      ["code"]="./installs/code.sh"
-      ["code-extensions"]="./installs/code-extensions.sh"
-      ["zsh"]="./installs/zsh.sh"
-      ["pnpm"]="./installs/pnpm.sh"
-      ["node"]="./installs/node.sh"
-      ["gnome-terminal-profile"]="./installs/gnome-terminal-profile.sh"
+      ["peam-essentials"]="./scripts/peam-essentials.sh"
+      ["asdf"]="./scripts/asdf.sh"
+      ["code"]="./scripts/code.sh"
+      ["code-extensions"]="./scripts/code-extensions.sh"
+      ["zsh"]="./scripts/zsh.sh"
+      ["pnpm"]="./scripts/pnpm.sh"
+      ["node"]="./scripts/node.sh"
+      ["gnome-terminal-profile"]="./scripts/gnome-terminal-profile.sh"
    );
    declare -a deps_orders;
 
