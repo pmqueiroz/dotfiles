@@ -5,12 +5,11 @@ load_options $@
 
 QUIETABLE=true
 
-echo "$CI"
-
 history 25 | grep -q "apt update"
 has_run_update_recently=$?
 
-if [[ $has_run_update_recently -ne 0 ]]; then
+# only check if not running on CI
+if [[ $CI -ne true ]] && [[ $has_run_update_recently -ne 0 ]]; then
    log_card error "you didn't run apt update recently, please do not skip this step"
    echo
    exit 1
