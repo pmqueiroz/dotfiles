@@ -5,7 +5,9 @@ load_options $@
 
 QUIETABLE=true
 
-history 25
+hist=$(history 25)
+echo $hist
+echo alo
 
 history 25 | grep -q "apt update"
 has_run_update_recently=$?
