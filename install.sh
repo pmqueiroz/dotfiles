@@ -52,17 +52,20 @@ else
 fi
 
 if [[ ${options[skip-adornments]} != true ]]; then
+   log info "installing adornments"
    if [[ -d "tmp" ]];then
       rm -rf tmp/reversal
    fi
 
+   log info "installing icons"
    git clone https://github.com/yeyushengfan258/Reversal-icon-theme.git ./tmp/reversal --depth=1
 
    bash tmp/reversal/install.sh -purple
 
    gsettings set org.gnome.desktop.interface icon-theme "Reversal-purple-dark"
 
-   cp background.jpg /usr/share/backgrounds/dotfiles-background.jpg
+   log info "installing background"
+   sudo cp background.jpg /usr/share/backgrounds/dotfiles-background.jpg
 
    gsettings set org.gnome.desktop.background picture-uri file:////usr/share/backgrounds/dotfiles-background.jpg
 else
