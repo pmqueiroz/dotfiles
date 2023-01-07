@@ -11,6 +11,16 @@ if [[ ! -d "tmp" ]];then
    mkdir ./tmp
 fi
 
+has_installed_sources_before
+has_installed=$?
+
+if [[ $has_installed -ne 0 ]] && [[ ${options[skip-sources]} != true ]]; then
+   log action "adding sources to bash config file"
+   cat sources >> "$HOME/.bashrc"
+else
+   log info "skip bash sources"
+fi
+
 if [[ ${options[skip-fonts]} != true ]]; then
    log info "installing fonts"
 
@@ -113,14 +123,4 @@ if [[ ${options[skip-settings]} != true ]]; then
    done
 else
    log info "skip settings install"
-fi
-
-has_installed_sources_before
-has_installed=$?
-
-if [[ $has_installed -ne 0 ]] && [[ ${options[skip-sources]} != true ]]; then
-   log action "adding sources to bash config file"
-   cat sources >> "$HOME/.bashrc"
-else
-   log info "skip bash sources"
 fi
