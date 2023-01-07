@@ -9,13 +9,13 @@ history 25 | grep -q "apt update"
 has_run_update_recently=$?
 
 # only check if not running on CI
-if [[ $CI -ne true ]] && [[ $has_run_update_recently -ne 0 ]]; then
+if [[ -z $CI ]] && [[ $has_run_update_recently -ne 0 ]]; then
    log_card error "you didn't run apt update recently, please do not skip this step"
    echo
    exit 1
 fi
 
-log info "starting setup"
+log_card info "starting setup - peam dotfiles"
 
 if [[ ! -d "tmp" ]];then
    mkdir ./tmp

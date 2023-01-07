@@ -163,19 +163,6 @@ function generate_card() {
       echo "$side_spaces$final_text$side_spaces$remaining_space"
    }
 
-   declare -A card_options;
-
-   for opt in $@; do
-      if [[ $opt == -* ]]; then
-         if [[ $opt == --* ]]; then
-            card_options[${opt:2}]=true
-         else
-            card_options[${opt:1}]=true
-         fi
-         shift
-      fi
-   done
-
    inputed_message=$@
 
    if test -z "$inputed_message"; then
@@ -230,7 +217,7 @@ function generate_card() {
 
    echo $placeholder_line
    echo $tailline
-
+   echo " "
 }
 
 function log_card() {
