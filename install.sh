@@ -7,8 +7,6 @@ QUIETABLE=true
 
 log_card info "starting setup - do not forget to run apt update before running this script"
 
-exit 0
-
 if [[ ! -d "tmp" ]];then
    mkdir ./tmp
 fi
@@ -106,6 +104,8 @@ else
 fi
 
 if [[ ${options[skip-settings]} != true ]]; then
+   log info "configuring settings"
+
    declare -A settings=( 
       ["vscode-settings.json"]="$HOME/.config/Code/User/settings.json"
       ["keybindings.json"]="$HOME/.config/Code/User/keybindings.json"
@@ -119,6 +119,7 @@ if [[ ${options[skip-settings]} != true ]]; then
 
    settings_orders+=( "vscode-settings.json" )
    settings_orders+=( "keybindings.json" )
+   settings_orders+=( ".gitconfig" )
    settings_orders+=( "bash-commands" )
    settings_orders+=( ".inputrc" )
    settings_orders+=( ".tmux.config" )
