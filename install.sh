@@ -5,6 +5,15 @@ load_options $@
 
 QUIETABLE=true
 
+history 25 | grep -q "apt update"
+has_run_update_recently=$?
+
+if [[ $has_run_update_recently -ne 0 ]]; then
+   log_card error "you didn't run apt update recently, please do not skip this step"
+   echo
+   exit 0
+fi
+
 log info "starting setup"
 
 if [[ ! -d "tmp" ]];then

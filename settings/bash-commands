@@ -12,6 +12,8 @@ RESET="\033[0m"
 alias glo='git log --oneline'
 alias ..="cd .." # TODO try to get the same behavior as zsh
 
+declare -A log_levels_map=( ["info"]="$CYAN" ["error"]="$RED" ["action"]="$MAGENTA" ["ask"]="$YELLOW" )
+
 function branch_name() {
    echo $1 | awk '{gsub(": ","/"); print}' | awk '{gsub(" ", "-"); print}'
 }
@@ -25,7 +27,6 @@ function upper() {
 }
 
 function log() {
-   declare -A levels=( ["info"]="$CYAN" ["error"]="$RED" ["action"]="$MAGENTA" ["ask"]="$YELLOW" )
    log_level=$1
    shift
    
@@ -35,7 +36,7 @@ function log() {
 
    display_level=$(upper $log_level)
 
-   printf "${levels[$log_level]}[$display_level]$RESET $@\n"
+   printf "${log_levels_map[$log_level]}[$display_level]$RESET $@\n"
 }
 
 function fpush() {
@@ -121,6 +122,126 @@ function checkout() {
 
 function git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+
+function generate_card() {
+   RIGHT_BOTTOM_CORNER='───╯'
+   RIGHT_TOP_CORNER='───╮'
+   LEFT_BOTTOM_CORNER='╰───'
+   LEFT_TOP_CORNER='╭───'
+   SIDE_CHAR='│'
+   LINE_CHAR='─'
+   BLANK=' '
+   MAX_LINE_WIDTH=45
+
+   function fill_n_times() {
+      result=""
+      i=1
+      while [[ $i -le $1 ]]
+      do
+         result="$result$2"
+         ((i = i + 1))
+      done
+
+      echo "${result}"
+   }
+
+   function padding() {
+      length=$1
+      text=$2
+
+      total_space=$(( $length - ${#text} ))
+      remaining_side_length=$(( $total_space / 2 ))
+      remaining_side_space=$(fill_n_times $remaining_side_length ${BLANK})
+
+      final_text="$remaining_side_space${text}$remaining_side_space"
+
+      remaining_length=$(( $length - ${#final_text} ))
+      remaining_space=$(fill_n_times $remaining_length ${BLANK})
+      side_spaces=$(fill_n_times 3 ${BLANK})
+
+      echo "$side_spaces$final_text$side_spaces$remaining_space"
+   }
+
+   declare -A card_options;
+
+   for opt in $@; do
+      if [[ $opt == -* ]]; then
+         if [[ $opt == --* ]]; then
+            card_options[${opt:2}]=true
+         else
+            card_options[${opt:1}]=true
+         fi
+         shift
+      fi
+   done
+
+   inputed_message=$@
+
+   if test -z "$inputed_message"; then
+      echo "no message provided"
+      exit 1
+   fi
+
+   declare -a lines
+   current_index=0
+
+   for word in $inputed_message; do
+      current_line=${lines[$current_index]}
+      current_line_width=${#current_line}
+      current_word_width=${#word}
+      next_line="$current_line $word"
+
+      if [[ ${#next_line} < $MAX_LINE_WIDTH ]]; then
+         lines[$current_index]="$current_line$word "
+      else
+         ((current_index=current_index+1))
+         lines[$current_index]="$word "
+      fi
+   done
+
+   for line_index in ${!lines[@]}; do
+      curr_line=${lines[$line_index]}
+      trimmed_lime=$(echo $curr_line | sed 's/\s$//')
+      lines[$line_index]=$trimmed_lime
+   done
+
+   higher_line_width=0
+
+   for line_index in ${!lines[@]}; do
+      line=${lines[$line_index]}
+
+      if [[ ${#line} > $higher_line_width ]]; then
+         higher_line_width=${#line}
+      fi
+   done
+
+   headline="$LEFT_TOP_CORNER$(fill_n_times $higher_line_width $LINE_CHAR)$RIGHT_TOP_CORNER"
+   tailline="$LEFT_BOTTOM_CORNER$(fill_n_times $higher_line_width $LINE_CHAR)$RIGHT_BOTTOM_CORNER"
+   placeholder_line="$SIDE_CHAR$(padding $higher_line_width)$SIDE_CHAR"
+
+   echo $headline
+   echo $placeholder_line
+
+   for line_index in ${!lines[@]}; do
+      line=${lines[$line_index]}
+      echo "$SIDE_CHAR$(padding $higher_line_width "$line")$SIDE_CHAR"
+   done
+
+   echo $placeholder_line
+   echo $tailline
+
+}
+
+function log_card() {
+   log_level=$1
+   shift
+
+   CARD=$(generate_card "$1")
+
+   printf "\n${log_levels_map[$log_level]}"
+   printf "$CARD"
+   printf "$RESET\n"
 }
 
 DEFAULT_PS1="\[\e]0;@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]"
