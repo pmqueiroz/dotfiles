@@ -7,7 +7,7 @@ QUIETABLE=true
 
 log info "starting setup"
 
-if [[ ! -d "tmp/reversal" ]];then
+if [[ ! -d "tmp" ]];then
    mkdir ./tmp
 fi
 
@@ -39,6 +39,8 @@ if [[ ${options[skip-icons]} != true ]]; then
    git clone https://github.com/yeyushengfan258/Reversal-icon-theme.git ./tmp/reversal --depth=1
 
    bash tmp/reversal/install.sh -purple
+
+   gsettings set org.gnome.desktop.interface icon-theme "Reversal-purple-dark"
 else
    log info "skip icons install"
 fi
