@@ -120,6 +120,7 @@ if [[ ${options[skip-settings]} != true ]]; then
       [".gitconfig"]="$HOME/.gitconfig"
       ["bash-commands"]="/usr/bin/peam-commands"
       [".inputrc"]="$HOME/.inputrc"
+      [".tmux.config"]="$HOME/.tmux.config"
    )
 
    declare -a settings_orders;
@@ -128,6 +129,7 @@ if [[ ${options[skip-settings]} != true ]]; then
    settings_orders+=( "keybindings.json" )
    settings_orders+=( "bash-commands" )
    settings_orders+=( ".inputrc" )
+   settings_orders+=( ".tmux.config" )
 
    sudo -v; # just for grab previous permissions
 
