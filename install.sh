@@ -3,9 +3,14 @@ source helpers.sh
 
 load_options $@
 
-QUIETABLE=true
+QUIETABLE=true # used for log function
 
-log_card info "starting setup - do not forget to run apt update before running this script"
+log_card info << EOF
+   starting setup
+   do not forget to run apt update before running this script
+EOF
+
+exit 0
 
 if [[ ! -d "tmp" ]];then
    mkdir ./tmp
