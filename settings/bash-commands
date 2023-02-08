@@ -224,18 +224,7 @@ function log_card() {
    log_level=$1
    shift
 
-   if [ -p /dev/stdin ]; then
-   INPUT=$(cat)
-   else
-      if [ ! -z "$1" ]; then
-         INPUT=$1
-      else
-         log error "no input given"
-         exit 1
-      fi
-   fi
-
-   CARD=$(generate_card "$INPUT")
+   CARD=$(generate_card "$1")
 
    printf "\n${log_levels_map[$log_level]}"
    printf "$CARD"
