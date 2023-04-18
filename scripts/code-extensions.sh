@@ -16,6 +16,7 @@ extensions+=( "moyu.snapcode" )
 extensions+=( "GitHub.copilot" )
 extensions+=( "formulahendry.auto-rename-tag" )
 extensions+=( "dbaeumer.vscode-eslint" )
+extensions+=( "yoavbls.pretty-ts-errors" )
 
 installed_extensions=$(code --list-extensions)
 
