@@ -21,14 +21,13 @@ extensions+=( "yoavbls.pretty-ts-errors" )
 installed_extensions=$(code --list-extensions)
 
 for ext in "${extensions[@]}"; do
-    log action "trying to install $ext"
-
     echo "${installed_extensions[@]}" | grep -iq $ext
     already_installed=$?
 
     if [[ $already_installed -ne 0 ]]; then
+        log action "installing $ext"
         code --install-extension $ext
     else
-        log error "code extension $ext already installed. skipping"
+        log skip "code extension $ext already installed. skipping"
     fi
 done

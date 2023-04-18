@@ -18,7 +18,7 @@ if [[ $has_installed -ne 0 ]] && [[ ${options[skip-sources]} != true ]]; then
    log action "adding sources to bash config file"
    cat sources >> "$HOME/.bashrc"
 else
-   log info "skip bash sources"
+   log skip "skip bash sources"
 fi
 
 if [[ ${options[skip-fonts]} != true ]]; then
@@ -38,7 +38,7 @@ if [[ ${options[skip-fonts]} != true ]]; then
 
    fc-cache -f -v > /dev/null
 else
-   log info "skip fonts install"
+   log skip "skip fonts install"
 fi
 
 if [[ ${options[skip-adornments]} != true ]]; then
@@ -59,7 +59,7 @@ if [[ ${options[skip-adornments]} != true ]]; then
 
    gsettings set org.gnome.desktop.background picture-uri file:////usr/share/backgrounds/dotfiles-background.jpg
 else
-   log info "skip icons install"
+   log skip "skip icons install"
 fi
 
 if [[ ${options[skip-dependencies]} != true ]]; then
@@ -96,11 +96,11 @@ if [[ ${options[skip-dependencies]} != true ]]; then
 
          ${dependencies[$dep]}
       else
-         log error "$dep already registered; skipping";
+         log skip "$dep already registered; skipping";
       fi
    done
 else
-   log info "skip dependencies install"
+   log skip "skip dependencies install"
 fi
 
 if [[ ${options[skip-settings]} != true ]]; then
@@ -137,5 +137,5 @@ if [[ ${options[skip-settings]} != true ]]; then
       sudo chmod a+r ${settings[$setting_file]}
    done
 else
-   log info "skip settings install"
+   log skip "skip settings install"
 fi

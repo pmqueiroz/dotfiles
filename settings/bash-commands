@@ -5,6 +5,7 @@ GREEN="\u001b[32m"
 MAGENTA="\u001b[35m"
 CYAN="\u001b[36m"
 YELLOW="\033[33m"
+ORANGE="\e[38;2;255;165;0m"
 RED="\033[0;31m"
 BLUE="\[\e[1;34m\]"
 RESET="\033[0m"
@@ -12,7 +13,13 @@ RESET="\033[0m"
 alias glo='git log --oneline'
 alias ..="cd .." # TODO try to get the same behavior as zsh
 
-declare -A log_levels_map=( ["info"]="$CYAN" ["error"]="$RED" ["action"]="$MAGENTA" ["ask"]="$YELLOW" )
+declare -A log_levels_map=( 
+   ["info"]="$CYAN"
+   ["error"]="$RED"
+   ["action"]="$MAGENTA"
+   ["ask"]="$YELLOW"
+   ["skip"]="$ORANGE"
+)
 
 function branch_name() {
    echo $1 | awk '{gsub(": ","/"); print}' | awk '{gsub(" ", "-"); print}'
