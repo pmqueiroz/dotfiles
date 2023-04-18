@@ -80,7 +80,9 @@ EOF
 
 | distro | version | manually | ci |
 | -------|---------|----------|----|
-| Kali Linux | 2022.4 | :heavy_check_mark: | :heavy_check_mark: |
+| Kali Linux | 2022.4 | :heavy_check_mark: * | :x: |
 | Ubuntu | 22.04 | :heavy_check_mark: | :heavy_check_mark: |
 | Ubuntu | 20.04 | :x: | :heavy_check_mark: |
 | Debian | 11.6 | :heavy_check_mark: | :x: |
+
+> \*: Background isn't applied on Kali 
