@@ -132,6 +132,9 @@ if [[ ${options[skip-settings]} != true ]]; then
       mkdir -p $(dirname ${settings[$setting_file]})
 
       sudo cp settings/$setting_file ${settings[$setting_file]}
+
+      sudo chmod a+w ${settings[$setting_file]}
+      sudo chmod a+r ${settings[$setting_file]}
    done
 else
    log info "skip settings install"
