@@ -25,7 +25,7 @@ if [[ ${options[skip-ssh]} != true ]]; then
 
    log info "there is your ssh key: $GREEN$(cat $HOME/.ssh/id_ed25519.pub)$RESET copy and paste on $GREEN\https://github.com/settings/ssh/new$RESET"
 else
-   log info "skipping github ssh auth"
+   log skip "skipping github ssh auth"
 fi
 
 if [[ ${options[skip-npm-token]} != true ]]; then
@@ -38,7 +38,7 @@ if [[ ${options[skip-npm-token]} != true ]]; then
 
    npx npm-cli-login -u $user_name -p $inputed_password -e $user_email -r https://npm.pkg.github.com
 else
-   log info "skipping npm token auth"
+   log skip "skipping npm token auth"
 fi
 
 if [[ ${options[skip-git-configuring]} != true ]]; then
@@ -74,7 +74,7 @@ EOF
 
    log info "configuring git"
 else
-   log info "skipping git configuration"
+   log skip "skipping git configuration"
 fi
 
 log info "done!"
