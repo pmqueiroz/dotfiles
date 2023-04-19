@@ -68,7 +68,7 @@ EOF
 
    git config --global user.name $user_name
    git config --global user.email $user_email
-   git config --global core.editor code
+   git config --global core.editor "code --wait"
    git config --global advice.detachedhead false
    git config --global commit.gpgsign true
 
