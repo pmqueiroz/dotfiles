@@ -47,6 +47,14 @@ if [[ ${options[skip-adornments]} != true ]]; then
       rm -rf tmp/reversal
    fi
 
+
+   log info "install gtk theme"
+   curl -L -o "tmp/dracula-gtk.zip" https://github.com/dracula/gtk/archive/master.zip
+   sudo unzip ./tmp/dracula-gtk.zip -d /usr/share/themes/
+   gsettings set org.gnome.desktop.interface gtk-theme "Dracula"
+   gsettings set org.gnome.desktop.wm.preferences theme "Dracula"
+
+   exit 0
    log info "installing icons"
    git clone https://github.com/yeyushengfan258/Reversal-icon-theme.git ./tmp/reversal --depth=1
 
