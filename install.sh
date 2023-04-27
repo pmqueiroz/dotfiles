@@ -49,7 +49,8 @@ if [[ ${options[skip-adornments]} != true ]]; then
 
    log info "install gtk theme"
    curl -L -o "tmp/dracula-gtk.zip" https://github.com/dracula/gtk/archive/master.zip
-   sudo unzip ./tmp/dracula-gtk.zip -d /usr/share/themes/
+   sudo unzip ./tmp/dracula-gtk.zip -d tmp/
+   sudo cp -R ./tmp/gtk-master /usr/share/themes/Dracula/
    gsettings set org.gnome.desktop.interface gtk-theme "Dracula"
    gsettings set org.gnome.desktop.wm.preferences theme "Dracula"
 
