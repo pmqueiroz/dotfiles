@@ -5,6 +5,6 @@ Standards-Version: 3.9.2
 Package: peam-essentials
 Version: 0.2
 Maintainer: Your Name <yourname@example.com>
-Depends: xsel, build-essential, python3-pip, ripgrep, dconf-cli, gnome-tweaks, googler, neofetch, tmux, zoxide, jq
+Depends: xsel, build-essential, python3-pip, ripgrep, dconf-cli, gnome-tweaks, googler, neofetch, tmux, zoxide, jq, gh
 Architecture: all
 Description: Install essentials tools for peam workspace
