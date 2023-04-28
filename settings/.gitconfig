@@ -2,6 +2,10 @@
 	name = pmqueiroz
 	email = pedroqueiroz593@gmail.com
 [core]
-	editor = code
+	editor = code --wait
+[advice]
+	detachedhead = false
+[commit]
+	gpgsign = true
 [alias]
    l = log --pretty=format:\"%h - %an, %ar : %s\" --decorate

@@ -65,14 +65,6 @@ EOF
    log info "now you can add this gpg to$GREEN https://github.com/settings/gpg/new$RESET"
 
    log info "$exported_gpg"
-
-   git config --global user.name $user_name
-   git config --global user.email $user_email
-   git config --global core.editor "code --wait"
-   git config --global advice.detachedhead false
-   git config --global commit.gpgsign true
-
-   log info "configuring git"
 else
    log skip "skipping git configuration"
 fi
