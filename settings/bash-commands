@@ -11,7 +11,7 @@ BLUE="\[\e[1;34m\]"
 RESET="\033[0m"
 
 alias glo='git log --oneline'
-alias ..="cd .." # TODO try to get the same behavior as zsh
+alias pr='gh pr view --web'
 
 declare -A log_levels_map=( 
    ["info"]="$CYAN"
