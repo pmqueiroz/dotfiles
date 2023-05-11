@@ -242,7 +242,7 @@ function log_card() {
 DEFAULT_PS1="\[\e]0;@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]"
 
 function format_time_diff() {
-   if [[ $1 -lt 1 ]]; then
+   if [[ $1 -lt 3 ]]; then
       echo ""
       return 0
    fi
@@ -282,12 +282,16 @@ function __after_command() {
       PS1+="${RAW_GREEN}\u${RESET}"
    fi
 
-   current_command=$(date +%s)
-   time_diff=$(( current_command - first_command ))
-   formatted_time=$(format_time_diff $time_diff)
+   if ! [ -z $first_command ]; then
+      current_command=$(date +%s)
+      time_diff=$(( current_command - first_command ))
+      formatted_time=$(format_time_diff $time_diff)
+      first_command=
+   fi
 
    if [ -n "$formatted_time" ]; then
       ran_time="${YELLOW}took ${formatted_time} ${RESET}"
+      formatted_time=
    fi
 
    PS1+="$DEFAULT_PS1 \$(git_branch) $ran_time❯ "
