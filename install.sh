@@ -16,7 +16,7 @@ has_installed=$?
 
 if [[ $has_installed -ne 0 ]] && [[ ${options[skip-sources]} != true ]]; then
    log action "adding sources to bash config file"
-   cat sources >> "$HOME/.bashrc"
+   cat sources.sh >> "$HOME/.bashrc"
 else
    log skip "skip bash sources"
 fi
