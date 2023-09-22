@@ -239,6 +239,14 @@ function log_card() {
    printf "$RESET\n"
 }
 
+function run_node() {
+   tmp_file=$(mktemp --suffix=.js)
+   code $tmp_file --wait
+   file_content=$(cat ${tmp_file})
+   node -p -e "${file_content}"
+   rm -rf $tmp_file
+}
+
 DEFAULT_PS1="\[\e]0;@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]"
 
 function format_time_diff() {
