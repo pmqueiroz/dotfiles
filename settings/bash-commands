@@ -56,22 +56,21 @@ function fpush() {
 }
 
 function commit() {
-   for opt in $@; do
-      if [[ $opt == -* ]]; then
-         if [[ $opt == --* ]]; then
-            commit_options[${opt:2}]=true
-         else
-            commit_options[${opt:1}]=true
-         fi
-         shift
+   declare -a commit_options;
+   declare -a inputted_message;
+
+   for arg in $@; do
+      if [[ $arg == -* ]]; then
+         commit_options+=( "$arg" )
+      else
+         inputted_message+=( "$arg" )
       fi
+      shift
    done
 
-   if [[ ${options[skip-add]} != true ]]; then
-      git add .
-   else
-      log info "skipping add files"
-   fi
+   inputted_message="${inputted_message[@]}"
+
+   git add .
 
    log info "commiting files\n"
 
@@ -79,15 +78,12 @@ function commit() {
    git diff --name-only --cached
    printf "\n$RESET"
 
-   inputed_message="$1"
-   shift
-   rest_args="$@"
 
-   if test -z "$inputed_message"
+   if test -z "$inputted_message"
    then
       commitmsg=`commit_title $(git branch --show-current)`
    else
-      commitmsg="$inputed_message"
+      commitmsg="$inputted_message"
    fi
 
    log info "with message$GREEN $commitmsg$RESET"
@@ -97,14 +93,14 @@ function commit() {
    read -p "" -n 1 -r
    if [[ $REPLY =~ ^[Yy]$ ]]
    then
-      echo
-      git commit -m "${commitmsg}" $rest_args
+      git commit -m "${commitmsg}" ${commit_options[@]}
    else
       echo
       log error "exiting..."
       git reset
    fi
 }
+
 
 function checkout() {
    current_branch=$(git branch --show-current)
