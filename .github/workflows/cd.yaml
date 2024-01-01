@@ -76,7 +76,9 @@ jobs:
         rustc bundler.rs && ./bundler install.sh install.sh
     - name: Commit files
       run: |
-        git commit -a -m "Add changes"
+        git config --local user.email "pedroqueiroz593@gmail.com"
+        git config --local user.name "pmqueiroz"
+        git commit -a -m "update install"
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
