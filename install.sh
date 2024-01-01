@@ -1,11 +1,37 @@
 #!/bin/bash
-source helpers.sh
+source dots/helpers.sh
+source dots/aliases.sh
+
+source recipes/asdf.sh
+source recipes/code.sh
+source recipes/essentials.sh
+source recipes/node.sh
+source recipes/pnpm.sh
 
 load_options $@
 
 QUIETABLE=true
 
-log_card info "starting setup - do not forget to run apt update before running this script"
+log_card info "starting setup"
+
+log ask "input your username:"
+read user_name
+echo
+
+log ask "input your email:"
+read user_email
+echo
+
+log ask "input your sudo password:"
+read sudo_password
+echo
+
+echo $sudo_password | sudo -S -v
+authenticated=$?
+if [ $authenticated -ne 0 ] ;then
+   log error "wrong sudo password"
+   exit 1
+fi
 
 if [[ ! -d "tmp" ]];then
    mkdir ./tmp
@@ -16,133 +42,61 @@ has_installed=$?
 
 if [[ $has_installed -ne 0 ]] && [[ ${options[skip-sources]} != true ]]; then
    log action "adding sources to bash config file"
-   cat sources.sh >> "$HOME/.bashrc"
+   cat dots/sources.sh >> "$HOME/.bashrc"
 else
    log skip "skip bash sources"
-fi
-
-if [[ ${options[skip-fonts]} != true ]]; then
-   log info "installing fonts"
-
-   fonts_paths="$HOME/.local/share/fonts"
-   mkdir -p $fonts_paths
-
-   for font in ./fonts/*.ttf
-   do
-      log action "installing font $font"
-
-      cp $font $fonts_paths
-   done
-
-   log action "restarting fonts cache"
-
-   fc-cache -f -v > /dev/null
-else
-   log skip "skip fonts install"
-fi
-
-if [[ ${options[skip-adornments]} != true ]]; then
-   log info "installing adornments"
-   if [[ -d "tmp" ]];then
-      rm -rf tmp/reversal
-   fi
-
-   log info "install gtk theme"
-   curl -L -o "tmp/dracula-gtk.zip" https://github.com/dracula/gtk/archive/master.zip
-   sudo unzip ./tmp/dracula-gtk.zip -d tmp/
-   sudo cp -R ./tmp/gtk-master /usr/share/themes/Dracula/
-   gsettings set org.gnome.desktop.interface gtk-theme "Dracula"
-   gsettings set org.gnome.desktop.wm.preferences theme "Dracula"
-
-   log info "installing icons"
-   git clone https://github.com/yeyushengfan258/Reversal-icon-theme.git ./tmp/reversal --depth=1
-
-   bash tmp/reversal/install.sh -purple
-
-   gsettings set org.gnome.desktop.interface icon-theme "Reversal-purple-dark"
-
-   log info "installing background"
-   sudo cp background.jpg /usr/share/backgrounds/dotfiles-background.jpg
-
-   gsettings set org.gnome.desktop.background picture-uri file:////usr/share/backgrounds/dotfiles-background.jpg
-else
-   log skip "skip icons install"
 fi
 
 if [[ ${options[skip-dependencies]} != true ]]; then
    log info "installing dependencies"
 
-   declare -A dependencies=(
-      ["peam-essentials"]="./scripts/peam-essentials.sh"
-      ["asdf"]="./scripts/asdf.sh"
-      ["code"]="./scripts/code.sh"
-      ["code-extensions"]="./scripts/code-extensions.sh"
-      ["zsh"]="./scripts/zsh.sh"
-      ["pnpm"]="./scripts/pnpm.sh"
-      ["node"]="./scripts/node.sh"
-      ["gnome-terminal-profile"]="./scripts/gnome-terminal-profile.sh"
-   );
-   declare -a deps_orders;
+   declare -a dependencies;
 
-   deps_orders+=( "peam-essentials" )
-   deps_orders+=( "asdf" )
-   deps_orders+=( "code" )
-   deps_orders+=( "code-extensions" )
-   deps_orders+=( "pnpm" )
-   deps_orders+=( "node" )
-   deps_orders+=( "gnome-terminal-profile" )
+   dependencies+=( "essentials" )
+   dependencies+=( "asdf" )
+   dependencies+=( "code" )
+   dependencies+=( "pnpm" )
+   dependencies+=( "node" )
 
-   for dep in "${deps_orders[@]}"; do 
-      log info "trying to install $dep"
-
-      exists=$(which $dep)
-      check_install_exit=$?
-
-      if [ $check_install_exit -ne 0 ] ;then
-         log action "running ${dependencies[$dep]} script"
-
-         ${dependencies[$dep]}
-      else
-         log skip "$dep already registered; skipping";
-      fi
+   for dep in "${dependencies[@]}"; do 
+      log action "running $dep recipe"
+      eval install_$dep
    done
 else
    log skip "skip dependencies install"
 fi
 
-if [[ ${options[skip-settings]} != true ]]; then
-   log info "configuring settings"
+if [[ ${options[skip-dots]} != true ]]; then
+   log info "configuring dotfiles"
 
-   declare -A settings=( 
+   declare -A dots=( 
       ["vscode-settings.json"]="$HOME/.config/Code/User/settings.json"
       ["keybindings.json"]="$HOME/.config/Code/User/keybindings.json"
       [".gitconfig"]="$HOME/.gitconfig"
-      ["bash-commands"]="/usr/bin/peam-commands"
+      ["aliases.sh"]="/usr/bin/peam-commands"
       [".inputrc"]="$HOME/.inputrc"
       [".tmux.config"]="$HOME/.tmux.config"
    )
 
-   declare -a settings_orders;
+   for dotfile in "${!dots[@]}"; do 
+      dotfile_path=${dots[$dotfile]}
+      mkdir -p $(dirname $dotfile_path)
 
-   settings_orders+=( "vscode-settings.json" )
-   settings_orders+=( "keybindings.json" )
-   settings_orders+=( ".gitconfig" )
-   settings_orders+=( "bash-commands" )
-   settings_orders+=( ".inputrc" )
-   settings_orders+=( ".tmux.config" )
+      if git rev-parse --git-dir > /dev/null 2>&1; then
+         cp dots/$dotfile ./tmp/$dotfile
+      else
+         log action "fetching dot $dotfile"
+         curl -o ./tmp/$dotfile https://raw.githubusercontent.com/pmqueiroz/dotfiles/master/dots/$dotfile
+      fi
 
-   sudo -v; # just for grab previous permissions
-
-   for setting_file in "${settings_orders[@]}"; do 
-      log action "installing setting $setting_file"
-
-      mkdir -p $(dirname ${settings[$setting_file]})
-
-      sudo cp settings/$setting_file ${settings[$setting_file]}
-
-      sudo chmod a+w ${settings[$setting_file]}
-      sudo chmod a+r ${settings[$setting_file]}
+      log action "setting dot $dotfile"
+      sudo cat ./tmp/$dotfile | render_string username $user_name email $user_email > $dotfile_path
+      sudo chmod a+w $dotfile_path
+      sudo chmod a+r $dotfile_path
    done
 else
    log skip "skip settings install"
 fi
+
+sudo --reset-timestamp
+rm -rf ./tmp
