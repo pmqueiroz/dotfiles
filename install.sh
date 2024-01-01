@@ -61,6 +61,7 @@ if [[ ${options[skip-dependencies]} != true ]]; then
    for dep in "${dependencies[@]}"; do 
       log action "running $dep recipe"
       eval install_$dep
+      source $HOME/.bashrc
    done
 else
    log skip "skip dependencies install"
