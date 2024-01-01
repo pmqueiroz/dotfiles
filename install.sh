@@ -90,7 +90,8 @@ if [[ ${options[skip-dots]} != true ]]; then
       fi
 
       log action "setting dot $dotfile"
-      sudo bash -c "cat ./tmp/$dotfile | render_string username $user_name email $user_email > $dotfile_path"
+      cat ./tmp/$dotfile | render_string username $user_name email $user_email > ./tmp/$dotfile
+      sudo cp ./tmp/$dotfile $dotfile_path
       sudo chmod a+w $dotfile_path
       sudo chmod a+r $dotfile_path
    done
