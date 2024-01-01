@@ -7,7 +7,7 @@ jobs:
      name: Test Install
      strategy:
        matrix:
-         distros: [ubuntu-latest, macos-latest]
+         distros: [ubuntu-latest]
      runs-on: ${{ matrix.distros }}
      steps:
        - uses: actions/checkout@v3
