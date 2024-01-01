@@ -26,3 +26,4 @@ jobs:
       uses: ad-m/github-push-action@master
       with:
         branch: release
+        force: true
