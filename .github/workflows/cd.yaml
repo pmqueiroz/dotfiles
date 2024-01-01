@@ -46,6 +46,8 @@ jobs:
         }
 
         fn process_script(file_path: &str, processed_files: &mut HashSet<String>, output: &mut Vec<String>) -> io::Result<()> {
+          println!("Processing: {}", file_path);
+
           if processed_files.contains(file_path) {
             return Ok(());
           }
