@@ -10,14 +10,12 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
     - name: Install Rust toolchain
       uses: actions-rs/toolchain@v1
       with:
         profile: minimal
         toolchain: stable
         override: true
-
     - run: |
         cat <<EOF > bundler.rs
         use std::fs;
@@ -75,7 +73,7 @@ jobs:
         }
         EOF
 
-        rustc bundler.rs && ./bundler ../install.sh ../install.sh
+        rustc bundler.rs && ./bundler install.sh install.sh
     - name: Commit files
       run: |
         git commit -a -m "Add changes"
