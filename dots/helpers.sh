@@ -9,6 +9,17 @@ function load_options() {
    done
 }
 
+logfile="peam_dotfiles_$(date +%Y%m%d_%H%M%S).log"
+
+function _ {
+   [ "${options[verbose]}" = true ] && eval $@ || eval $@ &>> $logfile
+}
+
+function loader {
+   echo $@
+   gum spin -s minidot -- $@
+}
+
 function has_installed_sources_before() {
    cat "$HOME/.bashrc" | grep -q "INSTALLED_BY_DOTFILES"
    return $?

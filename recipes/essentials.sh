@@ -12,6 +12,13 @@ function install_essentials {
    )
 
    for pkg in "${packages[@]}"; do
-      brew install $pkg
+      if ! _ command -v gum; then
+         _ brew install $pkg
+         if [ $? -ne 0 ]; then
+            log error "failed to install $pkg"
+         fi
+      else
+         log warn "$pkg already installed. skipping"
+      fi
    done
 }

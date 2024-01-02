@@ -44,10 +44,7 @@ function log {
 
    display_level=$(upper $log_level)
 
-   printf "${log_levels_map[$log_level]}[$display_level]$RESET $@"
-   if [[ $log_level != "ask" ]]; then
-      echo
-   fi
+   gum log -t kitchen -l $log_level $@
 }
 
 function fpush {

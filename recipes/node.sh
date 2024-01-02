@@ -1,9 +1,7 @@
 #!/bin/bash
 
 function install_node {
-   asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-
-   asdf install nodejs lts
-
-   asdf global nodejs lts
+   _ asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+   _ asdf install nodejs lts
+   _ asdf global nodejs lts
 }

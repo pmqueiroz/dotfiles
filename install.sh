@@ -8,30 +8,46 @@ source recipes/essentials.sh
 source recipes/node.sh
 source recipes/pnpm.sh
 
+if ! _ command -v brew; then
+   log fatal "brew is not installed. Please install Homebrew first."
+   exit 1
+fi
+
+if ! _ command -v gum; then
+   log info "installing gum"
+   _ brew install gum
+
+   if [ $? -ne 0 ]; then
+      log fatal "failed to install gum."
+      exit 1
+   fi
+fi
+
 load_options $@
 
 QUIETABLE=true
 
-log_card info "starting setup"
+gum style \
+	--foreground 212 --border-foreground 212 --border rounded \
+	--align center --width 50 --margin "1 2" --padding "1 4" \
+	'starting setup ' 'made with <3 by peam'
 
-log ask "input your username:"
-read user_name
-echo
+user_name=$(gum input --placeholder 'username')
+user_email=$(gum input --placeholder 'email@mail.com')
 
-log ask "input your email:"
-read user_email
-echo
+_ echo "${user_name}_$user_email"
 
-log ask "input your sudo password:"
-read sudo_password
-echo
+function auth {
+   gum input --password --placeholder 'your sudo password' | sudo -Sv -p ""
 
-echo $sudo_password | sudo -S -v
-authenticated=$?
-if [ $authenticated -ne 0 ] ;then
-   log error "wrong sudo password"
-   exit 1
-fi
+   authenticated=$?
+   if [ $authenticated -ne 0 ] ;then
+      log error "wrong sudo password"
+      auth
+   fi
+}
+
+auth
 
 if [[ ! -d "tmp" ]];then
    mkdir ./tmp
@@ -41,10 +57,10 @@ has_installed_sources_before
 has_installed=$?
 
 if [[ $has_installed -ne 0 ]] && [[ ${options[skip-sources]} != true ]]; then
-   log action "adding sources to bash config file"
+   log info "adding sources to bash config file"
    cat dots/sources.sh >> "$HOME/.bashrc"
 else
-   log skip "skip bash sources"
+   log warn "skip bash sources"
 fi
 
 if [[ ${options[skip-dependencies]} != true ]]; then
@@ -59,12 +75,12 @@ if [[ ${options[skip-dependencies]} != true ]]; then
    dependencies+=( "node" )
 
    for dep in "${dependencies[@]}"; do 
-      log action "running $dep recipe"
+      log info "running $dep recipe"
       eval install_$dep
       source $HOME/.bashrc
    done
 else
-   log skip "skip dependencies install"
+   log warn "skip dependencies install"
 fi
 
 if [[ ${options[skip-dots]} != true ]]; then
@@ -86,21 +102,21 @@ if [[ ${options[skip-dots]} != true ]]; then
       if git rev-parse --git-dir > /dev/null 2>&1; then
          cp dots/$dotfile ./tmp/$dotfile
       else
-         log action "fetching dot $dotfile"
+         log info "fetching dot $dotfile"
          curl -o ./tmp/$dotfile https://raw.githubusercontent.com/pmqueiroz/dotfiles/master/dots/$dotfile
       fi
 
-      log action "setting dot $dotfile"
+      log info "setting dot $dotfile"
       cat ./tmp/$dotfile | render_string username $user_name email $user_email > ./tmp/$dotfile
       sudo cp ./tmp/$dotfile $dotfile_path
       sudo chmod a+w $dotfile_path
       sudo chmod a+r $dotfile_path
    done
 else
-   log skip "skip settings install"
+   log warn "skip settings install"
 fi
 
-log_card info "starting authentication"
+exit 1
 
 if [[ ${options[skip-ssh]} != true ]]; then
    log info "creating github ssh auth"
@@ -114,7 +130,7 @@ if [[ ${options[skip-ssh]} != true ]]; then
 
    log info "there is your ssh key: $GREEN$(cat $HOME/.ssh/id_ed25519.pub)$RESET copy and paste on $GREEN\https://github.com/settings/ssh/new$RESET"
 else
-   log skip "skipping github ssh auth"
+   log warn "skipping github ssh auth"
 fi
 
 if [[ ${options[skip-npm-token]} != true ]]; then
@@ -127,7 +143,7 @@ if [[ ${options[skip-npm-token]} != true ]]; then
 
    npx npm-cli-login -u $user_name -p $inputed_password -e $user_email -r https://npm.pkg.github.com
 else
-   log skip "skipping npm token auth"
+   log warn "skipping npm token auth"
 fi
 
 if [[ ${options[skip-git-configuring]} != true ]]; then
@@ -155,7 +171,7 @@ EOF
 
    log info "$exported_gpg"
 else
-   log skip "skipping git configuration"
+   log warn "skipping git configuration"
 fi
 
 log info "done!"

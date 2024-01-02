@@ -1,8 +1,6 @@
 #!/bin/bash
 function install_pnpm {
-   asdf plugin-add pnpm
-
-   asdf install pnpm latest
-
-   asdf global pnpm latest
+   _ asdf plugin-add pnpm
+   _ asdf install pnpm latest
+   _ asdf global pnpm latest
 }

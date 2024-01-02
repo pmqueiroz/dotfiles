@@ -1,9 +1,16 @@
 #!/bin/bash
 
 function install_code {
-   curl -L -o "code_amd64.deb" "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
-
-   sudo dpkg -i ./code_amd64.deb
+   gum spin \
+      --spinner="minidot" \
+      --align="right" \
+      --title="$(log info downloading vscode)" \
+      -- curl -s -L -o "code_amd64.deb" "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
+   _ sudo dpkg -i ./code_amd64.deb
+   if [ $? -ne 0 ]; then
+      log error "failed to install vscode"
+      exit 1 # prevent installing extensions
+   fi
 
    declare -a extensions;
 
@@ -31,7 +38,7 @@ function install_code {
          log action "installing $ext"
          code --install-extension $ext
       else
-         log skip "code extension $ext already installed. skipping"
+         log warn "code extension $ext already installed. skipping"
       fi
    done
 }
