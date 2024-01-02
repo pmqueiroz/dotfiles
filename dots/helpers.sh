@@ -16,8 +16,11 @@ function _ {
 }
 
 function loader {
-   echo $@
-   gum spin -s minidot -- $@
+   if [[ -t 0 ]]; then
+      gum spin -s minidot --title="" -- $@
+   else
+      eval $@
+   fi
 }
 
 function has_installed_sources_before() {
