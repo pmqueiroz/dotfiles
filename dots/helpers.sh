@@ -23,16 +23,6 @@ function loader {
    fi
 }
 
-function has_installed_sources_before() {
-   cat "$HOME/.bashrc" | grep -q "INSTALLED_BY_DOTFILES"
-   return $?
-}
-
-function check_existing_ssh_key() {
-   ls $HOME/.ssh | grep -q id_ed25519
-   return $?
-}
-
 function render_string {
    local template=$(cat)
    while [ $# -gt 0 ]; do

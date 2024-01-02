@@ -1,5 +1,7 @@
 #!/bin/bash
 
+shopt -s expand_aliases
+
 function install_asdf {
    local asdf_folder=$HOME/.asdf
 

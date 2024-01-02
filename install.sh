@@ -8,12 +8,14 @@ source recipes/essentials.sh
 source recipes/node.sh
 source recipes/pnpm.sh
 
-if ! _ command -v brew; then
+shopt -s expand_aliases
+
+if ! command -v brew &> /dev/null; then
    log fatal "brew is not installed. Please install Homebrew first."
    exit 1
 fi
 
-if ! _ command -v gum; then
+if ! command -v gum &> /dev/null; then
    log info "installing gum"
    _ brew install gum
 
@@ -25,20 +27,22 @@ fi
 
 load_options $@
 
-QUIETABLE=true
-
 gum style \
 	--foreground 212 --border-foreground 212 --border rounded \
 	--align center --width 50 --margin "1 2" --padding "1 4" \
-	'starting setup ' 'made with <3 by peam'
+	'DOTFILES' 'starting setup' 'made with <3 by peam'
 
 user_name=$(gum input --placeholder 'username')
 user_email=$(gum input --placeholder 'email@mail.com')
+[ -z "$user_name" ] || [ -z "$user_email"  ] && exit 1 # prevent get stuck in ctrl+c
 
-_ echo "${user_name}_$user_email"
+_ log debug 'starting setup with credentials:'
+_ log debug "username: $user_name"
+_ log debug "email $user_email"
 
 function auth {
-   gum input --password --placeholder 'your sudo password' | sudo -Sv -p ""
+   passphrase=$(gum input --password --placeholder 'your sudo password')
+   echo $passphrase | sudo -Sv -p ""
 
    authenticated=$?
    if [ $authenticated -ne 0 ] ;then
@@ -53,7 +57,7 @@ if [[ ! -d "tmp" ]];then
    mkdir ./tmp
 fi
 
-has_installed_sources_before
+cat "$HOME/.bashrc" | grep -q "INSTALLED_BY_DOTFILES"
 has_installed=$?
 
 if [[ $has_installed -ne 0 ]] && [[ ${options[skip-sources]} != true ]]; then
@@ -116,65 +120,71 @@ else
    log warn "skip settings install"
 fi
 
-exit 1
+gum confirm "Proceed with authentication?" --timeout 10s --default="No" || exit 0
+
+function continue_auth {
+   gum style --foreground 212	--margin 1 'Press any key to continue'
+   read -n 1 -s -r
+}
 
 if [[ ${options[skip-ssh]} != true ]]; then
-   log info "creating github ssh auth"
+   log info "starting github ssh auth"
 
-   check_existing_ssh_key
-   existing_ssh=$?
-
-   if [[ $existing_ssh -ne 0 ]]; then
+   ls $HOME/.ssh | grep -q id_ed25519
+   if [ $? -ne 0 ]; then
+      log info 'creating ssh key'
       ssh-keygen -t ed25519 -C $user_email -f $HOME/.ssh/id_ed25519 -q -N ""
    fi
 
-   log info "there is your ssh key: $GREEN$(cat $HOME/.ssh/id_ed25519.pub)$RESET copy and paste on $GREEN\https://github.com/settings/ssh/new$RESET"
+   HEADER=$(gum style --foreground 212	--margin 1 'Copy this ssh key bellow')
+   BODY=$(gum style --margin "0 1" --padding "1" --foreground 15 --background 10 "$(cat $HOME/.ssh/id_ed25519.pub)")
+   FOOTER=$(gum join --align center --horizontal "$(gum style --foreground 212 --margin 1 'and paste on')" "$(gum style --foreground 222 --margin 1 'https://github.com/settings/ssh/new')")
+
+   gum join --align center --vertical "$HEADER" "$BODY" "$FOOTER"
 else
    log warn "skipping github ssh auth"
 fi
 
-if [[ ${options[skip-npm-token]} != true ]]; then
-   log info "creating npm token auth"
-   log ask "generate a new token in $GREEN\\https://github.com/settings/tokens/new${RESET}"
+continue_auth
 
-   log ask "input your generated password:"
-   read inputed_password
-   echo
+if [[ ${options[skip-npm-token]} != true ]]; then
+   gum join --align center --horizontal "$(gum style --foreground 212 --margin 1 'Generate a new token in')" "$(gum style --foreground 222 --margin 1 'https://github.com/settings/tokens/new')"
+   gum style --foreground 212	--margin 1 'Input your generated password'
+   inputed_password=$(gum input --placeholder 'gpg_...')
 
    npx npm-cli-login -u $user_name -p $inputed_password -e $user_email -r https://npm.pkg.github.com
 else
    log warn "skipping npm token auth"
 fi
 
+continue_auth
+
 if [[ ${options[skip-git-configuring]} != true ]]; then
-   log info "generating gpg key enter the passphrase"
+   log info "generating gpg key"
 
    tmp_key_config=$(mktemp)
 
-   cat >> $tmp_key_config << EOF
-   Key-Type: 1
-   Key-Length: 4096
-   Subkey-Type: 1
-   Subkey-Length: 4096
-   Name-Real: $user_name
-   Name-Email: $user_email
-   Expire-Date: 0
-EOF
+   cat ./dots/gpg_template.gpg | render_string username $user_name email $user_email passphrase $passphrase > $tmp_key_config
 
-   gpg --batch --gen-key $tmp_key_config
+   _ gpg --batch --gen-key $tmp_key_config
 
    generated_gpg=$(gpg --list-secret-keys --keyid-format=long | perl -lne 'print $1 if /sec\s+rsa4096\/([0-9A-Z]{16} )/' | tail -n 1)
-   
-   exported_gpg=$(gpg --armor --export $generated_gpg)
 
-   log info "now you can add this gpg to$GREEN https://github.com/settings/gpg/new$RESET"
+   HEADER=$(gum style --foreground 212	--margin 1 'Copy this gpg key bellow')
+   BODY=$(gum style --margin "0 1" --padding "1" --foreground 15 --background 10 -- "$(gpg --armor --export $generated_gpg)")
+   FOOTER=$(gum join --align center --horizontal "$(gum style --foreground 212 --margin 1 'and paste on')" "$(gum style --foreground 222 --margin 1 'https://github.com/settings/gpg/new')")
 
-   log info "$exported_gpg"
+   gum join --align center --vertical "$HEADER" "$BODY" "$FOOTER"
 else
    log warn "skipping git configuration"
 fi
 
-log info "done!"
+echo
+echo
+
+gum join --align center --vertical \
+   "$(gum style --foreground 212 --bold DONE!)" \
+   "$(gum style --foreground 211 --italic --faint 'do not forget to gimme a star on github')"
 
 sudo --reset-timestamp
 rm -rf ./tmp

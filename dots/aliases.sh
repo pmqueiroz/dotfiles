@@ -13,6 +13,8 @@ RESET="\033[0m"
 alias glo='git log --oneline'
 alias pr='gh pr view --web'
 alias repo='gh repo view --web'
+alias debug='gum log -s -t kitchen -l debug'
+alias log='gum log -t kitchen -l'
 
 declare -A log_levels_map=( 
    ["info"]="$CYAN"
@@ -32,19 +34,6 @@ function commit_title {
 
 function upper {
    echo $1 | tr '[:lower:]' '[:upper:]'
-}
-
-function log {
-   log_level=$1
-   shift
-   
-   if [[ $QUIETABLE == true ]] && [[ ${options[quiet]} == true ]] && [[ $log_level != "error" ]]; then
-      return 125 # operation canceled code
-   fi
-
-   display_level=$(upper $log_level)
-
-   gum log -t kitchen -l $log_level $@
 }
 
 function fpush {

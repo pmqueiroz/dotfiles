@@ -1,8 +1,11 @@
 #!/bin/bash
+shopt -s expand_aliases
 
 function install_code {
    log info downloading vscode
-   loader curl -s -L -o "code_amd64.deb" "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
+   # loader curl -s -L -o "code_amd64.deb" "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
+   loader sleep 3
+   log info installing vscode
    _ sudo dpkg -i ./code_amd64.deb
    if [ $? -ne 0 ]; then
       log error "failed to install vscode"

@@ -1,4 +1,5 @@
 #!/bin/bash
+shopt -s expand_aliases
 
 function install_essentials {
    packages=(
