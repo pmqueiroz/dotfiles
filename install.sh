@@ -1,5 +1,4 @@
 #!/bin/bash
-source dots/helpers.sh
 source dots/aliases.sh
 
 source recipes/asdf.sh
@@ -9,6 +8,36 @@ source recipes/node.sh
 source recipes/pnpm.sh
 
 shopt -s expand_aliases
+
+declare -A options;
+for opt in $@; do 
+   if [[ $opt == --* ]]; then
+      options[${opt:2}]=true
+   fi
+done
+
+logfile="peam_dotfiles_$(date +%Y%m%d_%H%M%S).log"
+
+function _ {
+   [ "${options[verbose]}" = true ] && eval $@ || eval $@ &>> $logfile
+}
+
+function loader {
+   if [[ -t 0 ]]; then
+      gum spin -s minidot --title="" -- $@
+   else
+      eval $@
+   fi
+}
+
+function render_string {
+   local template=$(cat)
+   while [ $# -gt 0 ]; do
+      template=${template//\{\{$1\}\}/$2}
+      shift 2
+   done
+   echo "$template"
+}
 
 if ! command -v brew &> /dev/null; then
    log fatal "brew is not installed. Please install Homebrew first."
@@ -24,8 +53,6 @@ if ! command -v gum &> /dev/null; then
       exit 1
    fi
 fi
-
-load_options $@
 
 gum style \
 	--foreground 212 --border-foreground 212 --border rounded \
