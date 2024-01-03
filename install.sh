@@ -163,7 +163,7 @@ if [[ ${options[skip-dots]} != true ]]; then
       fi
 
       log info "setting dot $dotfile"
-      cat ./tmp/$dotfile | render_string username $user_name email $user_email > ./tmp/$dotfile
+      cat ./dots/$dotfile | render_string username $user_name email $user_email > ./tmp/$dotfile
       sudo cp ./tmp/$dotfile $dotfile_path
       sudo chmod a+w $dotfile_path
       sudo chmod a+r $dotfile_path
