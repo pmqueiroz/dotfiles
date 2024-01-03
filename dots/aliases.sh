@@ -48,13 +48,6 @@ function commit {
 
    git add .
 
-   log info "commiting files\n"
-
-   printf "$GREEN"
-   git diff --name-only --cached
-   printf "\n$RESET"
-
-
    if test -z "$inputted_message"
    then
       commitmsg=`commit_title $(git branch --show-current)`
@@ -62,19 +55,14 @@ function commit {
       commitmsg="$inputted_message"
    fi
 
-   log info "with message$GREEN $commitmsg$RESET"
+   log info "commiting files with message $(git_style "$commitmsg")"
 
-   log ask "please confirm [Y/n]"
-   
-   read -p "" -n 1 -r
-   if [[ $REPLY =~ ^[Yy]$ ]]
-   then
-      git commit -m "${commitmsg}" ${commit_options[@]}
-   else
-      echo
-      log error "exiting..."
+   gum style --foreground 12 --margin "0 1" -- "$(git diff --name-only --cached)"
+
+   gum confirm "confirm?" && git commit -m "${commitmsg}" ${commit_options[@]} || {
+      log error exiting...
       git reset
-   fi
+   }
 }
 
 function checkout {
