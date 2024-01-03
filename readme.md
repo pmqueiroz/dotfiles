@@ -31,12 +31,13 @@ $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/pmqueiroz/dotfile
 
 | option  |          description             |
 |---------|----------------------------------|
-| --skip-dependencies | skip dependencies install |
-| --skip-sources | skip sources adds to bash config |
-| --skip-dots | skip settings install |
-| --skip-ssh | skip setting ssh key to github |
-| --skip-npm-token | skip setting personal access token to npm user |
-| --skip-git-configuring | skip configuring git |
+| <kbd>--verbose</kbd> | log all suppressed `stdout`\|`stderr` from commands |
+| <kbd>--skip-dependencies</kbd> | skip dependencies install |
+| <kbd>--skip-sources</kbd> | skip sources adds to bash config |
+| <kbd>--skip-dots</kbd> | skip settings install |
+| <kbd>--skip-ssh</kbd> | skip setting ssh key to github |
+| <kbd>--skip-npm-token</kbd> | skip setting personal access token to npm user |
+| <kbd>--skip-git-configuring</kbd> | skip configuring git |
 
 <div align="center">
 
