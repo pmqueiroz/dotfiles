@@ -18,7 +18,7 @@ Before running this script make sure you have the following installed:
    * [Git][git-url]
    * [Curl][curl-url]
    * [Homebrew][brew-url]
-   * A [Unix][unix-url] system based (linux/mac).
+   * [Unix][unix-url] system based (linux/mac).
 
 ### Run
 
