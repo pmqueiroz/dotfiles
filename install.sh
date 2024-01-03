@@ -85,12 +85,36 @@ if [[ ! -d "tmp" ]];then
    mkdir ./tmp
 fi
 
-cat "$HOME/.bashrc" | grep -q "INSTALLED_BY_DOTFILES"
-has_installed=$?
+if [[ ${options[skip-sources]} != true ]]; then
+   START_PATTERN="# ---BEGIN DOTFILES SOURCE---"
+   END_PATTERN="# ---END DOTFILES SOURCE---"
 
-if [[ $has_installed -ne 0 ]] && [[ ${options[skip-sources]} != true ]]; then
-   log info "adding sources to bash config file"
-   cat dots/sources.sh >> "$HOME/.bashrc"
+   installed_sources=$(mktemp)
+   awk "/${START_PATTERN}/,/${END_PATTERN}/" "$HOME/.bashrc" > $installed_sources
+
+   if [ -s $installed_sources ];then
+      installed_sum=$(checksum $installed_sources)
+      sources_sum=$(checksum ./dots/sources.sh)
+
+      if [ "$installed_sum" != "$sources_sum" ]; then
+         log info "source file is outdated. overwriting"
+         cp "$HOME/.bashrc" "$HOME/.bashrc.bak"
+         
+         awk -v replacement="$(<"./dots/sources.sh")" '
+            $0 ~ start {print replacement; skip = 1}
+            $0 ~ end {skip = 0; next}
+            !skip
+         ' start="$START_PATTERN" end="$END_PATTERN" "$HOME/.bashrc.bak" > "$HOME/.bashrc"
+      else
+         log warn "installed sources is ok. skip bash sources"
+      fi
+   else
+      log info "adding sources to bash config file"
+      echo >> "$HOME/.bashrc"
+      cat ./dots/sources.sh >> "$HOME/.bashrc"
+   fi
+
+   rm -rf $installed_sources
 else
    log warn "skip bash sources"
 fi
