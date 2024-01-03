@@ -75,15 +75,23 @@ function checkout {
    fi
 
    if [ $current_branch != $branch_to_checkout ]; then
-      git checkout $branch_to_checkout
+      log info "checking out to $(git_style $branch_to_checkout)"
+      git checkout --quiet $branch_to_checkout
    fi
+
+   log info 'updating branch'
 
    git pull --rebase --quiet
 
    local_branchs=$(git for-each-ref --format='%(refname:short)' refs/heads/ | sed s/$branch_to_checkout// )
 
    if test -n "$local_branchs"; then
-      echo $local_branchs | xargs git branch -D
+      log info 'deleting other branches. was:'
+      for branch in ${local_branchs[@]}; do 
+         git_style $branch
+      done
+
+      echo $local_branchs | xargs git branch -q -D
    fi
 }
 
