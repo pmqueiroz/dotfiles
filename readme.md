@@ -2,6 +2,7 @@
 [peam-url]: https://pmqueiroz.dev/
 [git-url]: https://git-scm.com/
 [curl-url]: https://curl.se/
+[brew-url]: https://brew.sh/
 [unix-url]: https://en.wikipedia.org/wiki/Unix
 <!-- END_VARS -->
 
