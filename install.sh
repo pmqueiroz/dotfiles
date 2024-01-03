@@ -19,6 +19,7 @@ done
 logfile="peam_dotfiles_$(date +%Y%m%d_%H%M%S).log"
 
 function _ {
+   [ "$1" = log ] || log debug  -- "running command: $@" &>> $logfile
    [ "${options[verbose]}" = true ] && eval $@ || eval $@ &>> $logfile
 }
 
