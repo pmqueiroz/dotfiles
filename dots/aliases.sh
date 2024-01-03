@@ -16,7 +16,9 @@ alias debug='gum log -s -t kitchen -l debug'
 alias log='gum log -t kitchen -l'
 
 function pr {
-   if ! gh pr view --json number -q '.number'; then
+   gh pr view --json number -q '.number' &> /dev/null
+
+   if [ $? -ne 0 ]; then
       title=$(commit_title $(git branch --show-current))
       gh pr create --assignee @me --title "$title" --web $@
       return 
