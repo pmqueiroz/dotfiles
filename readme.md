@@ -3,6 +3,7 @@
 [git-url]: https://git-scm.com/
 [curl-url]: https://curl.se/
 [brew-url]: https://brew.sh/
+[gawk-url]: https://www.gnu.org/software/gawk/
 [unix-url]: https://en.wikipedia.org/wiki/Unix
 <!-- END_VARS -->
 
@@ -17,8 +18,11 @@
 Before running this script make sure you have the following installed:
    * [Git][git-url]
    * [Curl][curl-url]
+   * [Gawk][gawk-url]
    * [Homebrew][brew-url]
    * [Unix][unix-url] system based (linux/mac).
+
+> **Warning** if you are in `macOS` make sure to update bash version
 
 ### Run
 
