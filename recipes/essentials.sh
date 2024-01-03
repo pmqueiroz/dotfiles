@@ -13,7 +13,7 @@ function install_essentials {
    )
 
    for pkg in "${packages[@]}"; do
-      if ! _ command -v gum; then
+      if ! command -v gum &> /dev/null; then
          _ brew install $pkg
          if [ $? -ne 0 ]; then
             log error "failed to install $pkg"
