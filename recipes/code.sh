@@ -2,13 +2,16 @@
 shopt -s expand_aliases
 
 function install_code {
-   log info downloading vscode
-   loader curl -s -L -o "code_amd64.deb" "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
-   log info installing vscode
-   _ sudo dpkg -i ./code_amd64.deb
-   if [ $? -ne 0 ]; then
-      log error "failed to install vscode"
-      exit 1 # prevent installing extensions
+   if ! command -v code &> /dev/null; then
+      log info downloading vscode
+      loader curl -s -L -o "code_amd64.deb" "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
+      log info installing vscode
+      _ sudo dpkg -i ./code_amd64.deb
+
+      if [ $? -ne 0 ]; then
+         log error "failed to install vscode"
+         exit 1 # prevent installing extensions
+      fi
    fi
 
    declare -a extensions;
