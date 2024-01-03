@@ -1,17 +1,14 @@
 <!-- VARS -->
+[peam-url]: https://pmqueiroz.dev/
 [git-url]: https://git-scm.com/
 [curl-url]: https://curl.se/
-[aptitude-url]: https://wiki.debian.org/Aptitude
-[debian-url]: https://www.debian.org/
+[unix-url]: https://en.wikipedia.org/wiki/Unix
 <!-- END_VARS -->
 
 <div align="center" >
    <img src="./.github/assets/logo_wo_blur.svg" width=300>
 
    _just let the magic happens_
-   
-   [![.github/workflows/test.yaml](https://github.com/pmqueiroz/dotfiles/actions/workflows/test.yaml/badge.svg?branch=master)](https://github.com/pmqueiroz/dotfiles/actions/workflows/test.yaml)
-   
 </div>
 
 ### Requirements
@@ -19,19 +16,13 @@
 Before running this script make sure you have the following installed:
    * [Git][git-url]
    * [Curl][curl-url]
-   * A Distro based on [Debian][debian-url] with [Aptitude][aptitude-url] Package Manager
-
-```sh
-$ apt install curl git
-```
+   * [Homebrew][brew-url]
+   * A system based on [Unix][unix-url] (linux/mac).
 
 ### Run
 
 ```sh
-$ sudo apt update
-$ sudo apt upgrade
-# now run the commands above that I know you skipped
-$ bash install.sh
+$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/pmqueiroz/dotfiles/release/install.sh)"
 ```
 > **Warning** This script must be used in a sudoer user, otherwise it will not work at all.
 
@@ -39,50 +30,15 @@ $ bash install.sh
 
 | option  |          description             |
 |---------|----------------------------------|
-| --quiet | skip all logs except error level |
-| --skip-fonts | skip fonts install |
-| --skip-adornments | skip icons and background install |
 | --skip-dependencies | skip dependencies install |
-| --skip-settings | skip settings install |
 | --skip-sources | skip sources adds to bash config |
-
-### Authenticate
-
-There is an another script to authenticate the machine with github, generating SSH keys and etc.
-
-#### Run
-
-```sh
-$ bash authenticate.sh
-```
-
-To skip interactions you can simply run:
-
-```sh
-$ bash authenticate.sh << EOF
-YOUR_EMAIL
-YOUR_USERNAME
-YOUR_PERSONAL_ACCESS_TOKEN
-EOF
-```
-
-#### Options
-
-| option  |          description             |
-|---------|----------------------------------|
+| --skip-dots | skip settings install |
 | --skip-ssh | skip setting ssh key to github |
 | --skip-npm-token | skip setting personal access token to npm user |
 | --skip-git-configuring | skip configuring git |
 
-### Tested on
+<div align="center">
 
-##### Distros that I have used this script to setup
+<samp>Made with :heart: by [**Peam**][peam-url]</samp> 
 
-| distro | version | manually | ci |
-| -------|---------|----------|----|
-| Kali Linux | 2022.4 | :heavy_check_mark: * | :x: |
-| Ubuntu | 22.04 | :heavy_check_mark: | :heavy_check_mark: |
-| Ubuntu | 20.04 | :x: | :heavy_check_mark: |
-| Debian | 11.6 | :heavy_check_mark: | :x: |
-
-> \*: Background isn't applied on Kali 
+</div>
