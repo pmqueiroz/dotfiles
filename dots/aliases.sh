@@ -16,30 +16,17 @@ alias repo='gh repo view --web'
 alias debug='gum log -s -t kitchen -l debug'
 alias log='gum log -t kitchen -l'
 
-declare -A log_levels_map=( 
-   ["info"]="$CYAN"
-   ["error"]="$RED"
-   ["action"]="$MAGENTA"
-   ["ask"]="$YELLOW"
-   ["skip"]="$ORANGE"
-)
-
-function branch_name {
-   echo $1 | awk '{gsub(": ","/"); print}' | awk '{gsub(" ", "-"); print}'
-}
-
 function commit_title {
    echo $1 | awk '{gsub("/",": "); print}' | awk '{gsub("-"," "); print}'
 }
 
-function upper {
-   echo $1 | tr '[:lower:]' '[:upper:]'
+function git_style {
+  gum style "$(gum style --foreground "#f14e32" '') $(gum style --bold --underline --foreground "#f14e32" "$@")"
 }
 
 function fpush {
    branch=`git branch --show-current`
-   display_branch=$(upper $branch)
-   log info "pushing and setting upstream to $GREEN${display_branch}$RESET"
+   log info "pushing and setting upstream to $(git_style $branch)"
 
    git push $1 --set-upstream origin $branch $2
 }
@@ -210,17 +197,6 @@ function generate_card {
    echo $placeholder_line
    echo $tailline
    echo " "
-}
-
-function log_card {
-   log_level=$1
-   shift
-
-   CARD=$(generate_card "$1")
-
-   printf "\n${log_levels_map[$log_level]}"
-   printf "$CARD"
-   printf "$RESET\n"
 }
 
 function run_node {
