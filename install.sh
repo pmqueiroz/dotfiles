@@ -40,6 +40,19 @@ function render_string {
    echo "$template"
 }
 
+function post_install {
+   echo
+   echo
+
+   gum join --align center --vertical \
+      "$(gum style --foreground 212 --bold DONE!)" \
+      "$(gum style --foreground 211 --italic --faint 'do not forget to gimme a star on github')"
+      "$(gum style --foreground 211 --italic --faint 'https://github.com/pmqueiroz/dotfiles')"
+
+   sudo --reset-timestamp
+   rm -rf ./tmp
+}
+
 if ! command -v brew &> /dev/null; then
    log fatal "brew is not installed. Please install Homebrew first."
    exit 1
@@ -172,7 +185,10 @@ else
    log warn "skip settings install"
 fi
 
-gum confirm "Proceed with authentication?" --timeout 10s --default="No" || exit 0
+gum confirm "Proceed with authentication?" --timeout 10s --default="No" || {
+   post_install
+   exit 0
+}
 
 function continue_auth {
    gum style --foreground 212	--margin 1 'Press any key to continue'
@@ -231,12 +247,4 @@ else
    log warn "skipping git configuration"
 fi
 
-echo
-echo
-
-gum join --align center --vertical \
-   "$(gum style --foreground 212 --bold DONE!)" \
-   "$(gum style --foreground 211 --italic --faint 'do not forget to gimme a star on github')"
-
-sudo --reset-timestamp
-rm -rf ./tmp
+post_install
