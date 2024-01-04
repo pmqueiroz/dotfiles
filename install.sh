@@ -46,7 +46,7 @@ function post_install {
 
    gum join --align center --vertical \
       "$(gum style --foreground 212 --bold DONE!)" \
-      "$(gum style --foreground 211 --italic --faint 'do not forget to gimme a star on github')"
+      "$(gum style --foreground 211 --italic --faint 'do not forget to gimme a star on github')" \
       "$(gum style --foreground 211 --italic --faint 'https://github.com/pmqueiroz/dotfiles')"
 
    sudo --reset-timestamp
