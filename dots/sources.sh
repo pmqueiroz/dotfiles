@@ -39,6 +39,14 @@ function format_time_diff {
    echo "${hours}h${minutes}m${seconds}s"
 }
 
+function branch_format {
+   branch_name=$(git branch --show-current 2> /dev/null)
+
+   if [ $? -eq 0 ]; then
+      git_style $branch_name
+   fi
+}
+
 function __before_command {
    if [[ $BASH_COMMAND != *"__after_command"* && $BASH_COMMAND != *"_zoxide_hook"* ]]; then
       first_command=$(date +%s)
@@ -68,7 +76,7 @@ function __after_command {
       formatted_time=
    fi
 
-   PS1+="$DEFAULT_PS1 \$(git_style $(git branch --show-current)) $ran_time❯ "
+   PS1+="$DEFAULT_PS1 \$(branch_format) $ran_time❯ "
 }
 
 trap '__before_command' DEBUG
