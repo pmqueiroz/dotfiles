@@ -36,6 +36,11 @@ function git_style {
 }
 
 function fpush {
+   if ! git rev-parse --is-inside-work-tree &> /dev/null; then
+      log error "not a git repository"
+      return 128
+   fi
+
    branch=`git branch --show-current`
    log info "pushing and setting upstream to $(git_style $branch)"
 
@@ -43,6 +48,10 @@ function fpush {
 }
 
 function commit {
+   if ! git rev-parse --is-inside-work-tree &> /dev/null; then
+      log error "not a git repository"
+      return 128
+   fi
    declare -a commit_options;
    declare -a inputted_message;
 
@@ -77,6 +86,11 @@ function commit {
 }
 
 function checkout {
+   if ! git rev-parse --is-inside-work-tree &> /dev/null; then
+      log error "not a git repository"
+      return 128
+   fi
+
    current_branch=$(git branch --show-current)
 
    if test -z "$1"; then
