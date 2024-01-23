@@ -1,4 +1,19 @@
 #!/bin/bash
+if ! command -v brew &> /dev/null; then
+   log fatal "brew is not installed. Please install Homebrew first."
+   exit 1
+fi
+
+if ! command -v gum &> /dev/null; then
+   log info "installing gum"
+   brew install gum
+
+   if [ $? -ne 0 ]; then
+      log fatal "failed to install gum."
+      exit 1
+   fi
+fi
+
 source dots/aliases.sh
 
 source recipes/asdf.sh
@@ -52,21 +67,6 @@ function post_install {
    sudo --reset-timestamp
    rm -rf ./tmp
 }
-
-if ! command -v brew &> /dev/null; then
-   log fatal "brew is not installed. Please install Homebrew first."
-   exit 1
-fi
-
-if ! command -v gum &> /dev/null; then
-   log info "installing gum"
-   _ brew install gum
-
-   if [ $? -ne 0 ]; then
-      log fatal "failed to install gum."
-      exit 1
-   fi
-fi
 
 gum style \
 	--foreground 212 --border-foreground 212 --border rounded \
