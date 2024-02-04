@@ -131,3 +131,19 @@ function run_node {
 function checksum {
    md5sum $1 | awk '{ print $1 }'
 }
+
+function hot {
+  if (( $# < 2 )); then
+   log error 'USAGE: hot <command> <file1> [<file2> ... <fileN>]'
+  else
+   script=$1
+   shift
+   a='';
+
+   while true; do
+      b=`ls -l $*`
+      [[ $a != $b ]] && a=$b && eval $script;
+      sleep .5;
+   done
+  fi
+}
