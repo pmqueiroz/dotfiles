@@ -64,8 +64,8 @@ function post_install {
       "$(gum style --foreground 211 --italic --faint 'do not forget to gimme a star on github')" \
       "$(gum style --foreground 211 --italic --faint 'https://github.com/pmqueiroz/dotfiles')"
 
+   sudo rm -rf ./tmp
    sudo --reset-timestamp
-   rm -rf ./tmp
 }
 
 gum style \
