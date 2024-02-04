@@ -1,45 +1,52 @@
-{
+{  
+    "extensions.ignoreRecommendations": true,
+    "security.workspace.trust.untrustedFiles": "open",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "symbols.hidesExplorerArrows": false,
+    "breadcrumbs.enabled": false,
+    "update.showReleaseNotes": false,
+    "update.mode": "start",
+    "window.commandCenter": false,
+    "window.titleBarStyle": "custom",
     "window.zoomLevel": 1,
+    "window.density.editorTabHeight": "compact",
+    "workbench.editor.labelFormat": "short",
+    "workbench.editor.empty.hint": "hidden",
+    "workbench.productIconTheme": "fluent-icons",
+    "workbench.statusBar.visible": false,
     "workbench.iconTheme": "material-icon-theme",
     "workbench.colorTheme": "Aura Soft Dark",
     "workbench.startupEditor": "none",
+    "explorer.fileNesting.enabled": true,
+    "explorer.confirmDragAndDrop": false,
+    "explorer.confirmDelete": false,
+    "explorer.compactFolders": false,
+    "explorer.sortOrder": "foldersNestsFiles",
+    "editor.accessibilitySupport": "off",
+    "editor.tabSize": 2,
+    "editor.hideCursorInOverviewRuler": true,
     "editor.parameterHints.enabled": false,
     "editor.cursorStyle": "line-thin",
     "editor.cursorBlinking": "expand",
     "editor.minimap.enabled": false,
-    "editor.tabSize": 3,
     "editor.detectIndentation": true,
     "editor.renderLineHighlight": "gutter",
     "editor.suggestSelection": "first",
     "editor.suggest.preview": true,
     "editor.suggest.showDeprecated": true,
     "editor.inlineSuggest.enabled": true,
-    "editor.rulers": [
-        100,
-        120
-    ],
-    "editor.codeActionsOnSave": {
-        "source.fixAll": true,
-        "source.sortImports": false
-    },
     "editor.bracketPairColorization.enabled": true,
-    "diffEditor.ignoreTrimWhitespace": false,
-    "explorer.fileNesting.enabled": true,
-    "explorer.confirmDragAndDrop": false,
-    "explorer.confirmDelete": false,
-    "explorer.compactFolders": false,
     /* Font configuration */
     "editor.fontLigatures": true,
     "editor.fontSize": 19,
     "editor.lineHeight": 26,
-    "editor.fontFamily": "'Fira Code', 'JetBrains Mono', monospace",
     /* Terminal Interface */
     "terminal.integrated.cursorStyle": "underline",
     "terminal.integrated.fontSize": 16,
     "terminal.integrated.gpuAcceleration": "on",
     "terminal.integrated.defaultLocation": "editor",
     "terminal.integrated.shellIntegration.enabled": false,
-    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "terminal.integrated.enableMultiLinePasteWarning": "never",
     "terminal.integrated.profiles.linux": {
         "yarn": {
             "path": "zsh",
@@ -78,6 +85,10 @@
     "emmet.includeLanguages": {
         "javascript": "javascriptreact"
     },
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit",
+        "source.sortImports": "never"
+    },
     /* Language configuration */
     "javascript.updateImportsOnFileMove.enabled": "always",
     "typescript.updateImportsOnFileMove.enabled": "always",
@@ -88,9 +99,36 @@
     "typescript.inlayHints.functionLikeReturnTypes.enabled": false,
     "typescript.inlayHints.propertyDeclarationTypes.enabled": false,
     "files.associations": {
-        "*.mdx": "markdown"
+        "*.mdx": "markdown",
+        ".prettierrc": "json"
     },
     /* Extensions and Modules configuration */
+    "apc.activityBar": {
+        "position": "bottom",
+        "hideSettings": true,
+        "size": 48,
+        "itemMargin": 8,
+        "itemSize": 32
+    },
+    "apc.header": {
+        "height": 36
+    },
+    "apc.listRow": {
+        "height": 24
+    },
+    "apc.font.family": "Inter",
+    "apc.stylesheet": {             
+        ".title-label": "display: none",
+        ".editor-actions": "display: none",
+        ".nosidebar .inline-tabs-placeholder": "width: 75px",
+        ".pane-header": "padding: 0 8px",
+        ".window-appicon": "display: none",
+        ".window-title": "display: none",
+        ".menubar": "padding-left: 8px",
+        ".menubar-menu-button": "opacity: 0",
+        ".menubar-menu-button:hover": "opacity: 1",
+        ".actions-container": "justify-content: flex-start!important"
+    },
     "material-icon-theme.folders.associations": {
         "fake": "mock",
         "infra": "app",
@@ -181,7 +219,5 @@
             "rule": "react-hooks/exhaustive-deps",
             "severity": "off"
         }
-    ],
-    "extensions.ignoreRecommendations": true,
-    "security.workspace.trust.untrustedFiles": "open"
+    ]
 }

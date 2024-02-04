@@ -29,6 +29,8 @@ function install_code {
    extensions+=( "formulahendry.auto-rename-tag" )
    extensions+=( "dbaeumer.vscode-eslint" )
    extensions+=( "yoavbls.pretty-ts-errors" )
+   extensions+=( "miguelsolorio.fluent-icons" )
+   extensions+=( "drcika.apc-extension" )
 
    installed_extensions=$(code --list-extensions)
 
