@@ -10,6 +10,8 @@ function install_essentials {
       "zoxide"
       "jq"
       "gh"
+      "glow"
+      "fzf"
    )
 
    for pkg in "${packages[@]}"; do
