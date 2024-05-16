@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 shopt -s expand_aliases
 
 function install_node {
-   _ asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-   _ asdf install nodejs lts
-   _ asdf global nodejs lts
+   _ asdf plugin add nodejs
+   _ asdf install nodejs 18.20.2
+   _ asdf global nodejs 18.20.2
 }

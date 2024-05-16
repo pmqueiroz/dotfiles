@@ -1,19 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-RAW_GREEN="\[\e[0;32m\]"
-GREEN="\u001b[32m"
-MAGENTA="\u001b[35m"
-CYAN="\u001b[36m"
-YELLOW="\033[33m"
-ORANGE="\e[38;2;255;165;0m"
-RED="\033[0;31m"
-BLUE="\[\e[1;34m\]"
-RESET="\033[0m"
+shopt -s expand_aliases
 
 alias glo='git log --oneline'
 alias repo='gh repo view --web'
 alias debug='gum log -s -t kitchen -l debug'
-alias log='gum log -t kitchen -l'
+alias gum_log='gum log -t kitchen -l'
 
 function pr {
    gh pr view --json number -q '.number' &> /dev/null
@@ -37,19 +29,19 @@ function git_style {
 
 function fpush {
    if ! git rev-parse --is-inside-work-tree &> /dev/null; then
-      log error "not a git repository"
+      gum_log error "not a git repository"
       return 128
    fi
 
    branch=`git branch --show-current`
-   log info "pushing and setting upstream to $(git_style $branch)"
+   gum_log info "pushing and setting upstream to $(git_style $branch)"
 
    git push $1 --set-upstream origin $branch $2
 }
 
 function commit {
    if ! git rev-parse --is-inside-work-tree &> /dev/null; then
-      log error "not a git repository"
+      gum_log error "not a git repository"
       return 128
    fi
    declare -a commit_options;
@@ -75,19 +67,19 @@ function commit {
       commitmsg="$inputted_message"
    fi
 
-   log info "commiting files with message $(git_style "$commitmsg")"
+   gum_log info "commiting files with message $(git_style "$commitmsg")"
 
    gum style --foreground 12 --margin "0 1" -- "$(git diff --name-only --cached)"
 
    gum confirm "confirm?" && git commit -m "${commitmsg}" ${commit_options[@]} || {
-      log error exiting...
+      gum_log error exiting...
       git reset
    }
 }
 
 function checkout {
    if ! git rev-parse --is-inside-work-tree &> /dev/null; then
-      log error "not a git repository"
+      gum_log error "not a git repository"
       return 128
    fi
 
@@ -100,18 +92,18 @@ function checkout {
    fi
 
    if [ $current_branch != $branch_to_checkout ]; then
-      log info "checking out to $(git_style $branch_to_checkout)"
+      gum_log info "checking out to $(git_style $branch_to_checkout)"
       git checkout --quiet $branch_to_checkout
    fi
 
-   log info 'updating branch'
+   gum_log info 'updating branch'
 
    git pull --rebase --quiet
 
    local_branchs=$(git for-each-ref --format='%(refname:short)' refs/heads/ | sed s/$branch_to_checkout// )
 
    if test -n "$local_branchs"; then
-      log info 'deleting other branches. was:'
+      gum_log info 'deleting other branches. was:'
       for branch in ${local_branchs[@]}; do 
          git_style $branch
       done
@@ -134,7 +126,7 @@ function checksum {
 
 function hot {
   if (( $# < 2 )); then
-   log error 'USAGE: hot <command> <file1> [<file2> ... <fileN>]'
+   gum_log error 'USAGE: hot <command> <file1> [<file2> ... <fileN>]'
   else
    script=$1
    shift

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 shopt -s expand_aliases
 
 function install_pnpm {
@@ -7,6 +7,6 @@ function install_pnpm {
       _ asdf install pnpm latest
       _ asdf global pnpm latest
    else 
-      log warn "pnpm already installed. skipping"
+      gum_log warn "pnpm already installed. skipping"
    fi
 }

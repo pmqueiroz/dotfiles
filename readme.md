@@ -3,8 +3,8 @@
 [git-url]: https://git-scm.com/
 [curl-url]: https://curl.se/
 [brew-url]: https://brew.sh/
-[gawk-url]: https://www.gnu.org/software/gawk/
 [unix-url]: https://en.wikipedia.org/wiki/Unix
+[code-url]: https://code.visualstudio.com/
 <!-- END_VARS -->
 
 <div align="center" >
@@ -18,9 +18,8 @@
 Before running this script make sure you have the following installed:
    * [Git][git-url]
    * [Curl][curl-url]
-   * [Gawk][gawk-url]
    * [Homebrew][brew-url]
-   * [Unix][unix-url] system based (linux/mac).
+   * [Visual Studio Code][code-url] _('code' need to bee installed in PATH)_
 
 > **Warning** if you are in `macOS` make sure to update bash version
 
@@ -30,6 +29,8 @@ Before running this script make sure you have the following installed:
 $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/pmqueiroz/dotfiles/release/install.sh)"
 ```
 > **Warning** This script must be used in a sudoer user, otherwise it will not work at all.
+
+...
 
 ### Options
 

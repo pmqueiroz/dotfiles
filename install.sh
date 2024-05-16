@@ -1,28 +1,37 @@
-#!/bin/bash
+#!/usr/bin/env bash
+shopt -s expand_aliases
+source .dotfilesrc
+
 if ! command -v brew &> /dev/null; then
-   log fatal "brew is not installed. Please install Homebrew first."
+   echo "[FATAL] brew is not installed. Please install Homebrew first."
    exit 1
 fi
 
 if ! command -v gum &> /dev/null; then
-   log info "installing gum"
+   echo "[INFO] installing gum"
    brew install gum
 
    if [ $? -ne 0 ]; then
-      log fatal "failed to install gum."
+      echo "[FATAL] failed to install gum."
       exit 1
    fi
 fi
 
-source dots/aliases.sh
+if ! command -v md5sum &> /dev/null; then
+   echo "[INFO] installing coreutils"
+   brew install coreutils
+
+   if [ $? -ne 0 ]; then
+      echo "[FATAL] failed to install coreutils."
+      exit 1
+   fi
+fi
 
 source recipes/asdf.sh
 source recipes/code.sh
 source recipes/essentials.sh
 source recipes/node.sh
 source recipes/pnpm.sh
-
-shopt -s expand_aliases
 
 declare -A options;
 for opt in $@; do 
@@ -34,7 +43,7 @@ done
 logfile="peam_dotfiles_$(date +%Y%m%d_%H%M%S).log"
 
 function _ {
-   [ "$1" = log ] || log debug  -- "running command: $@" &>> $logfile
+   [ "$1" = gum_log ] || gum_log debug -- "running command: $@" &>> $logfile
    [ "${options[verbose]}" = true ] && eval $@ || eval $@ &>> $logfile
 }
 
@@ -77,9 +86,9 @@ user_name=$(gum input --placeholder 'username')
 user_email=$(gum input --placeholder 'email@mail.com')
 [ -z "$user_name" ] || [ -z "$user_email"  ] && exit 1 # prevent get stuck in ctrl+c
 
-_ log debug 'starting setup with credentials:'
-_ log debug "username: $user_name"
-_ log debug "email $user_email"
+_ gum_log debug 'starting setup with credentials:'
+_ gum_log debug "username: $user_name"
+_ gum_log debug "email $user_email"
 
 function auth {
    passphrase=$(gum input --password --placeholder 'your sudo password')
@@ -87,7 +96,7 @@ function auth {
 
    authenticated=$?
    if [ $authenticated -ne 0 ] ;then
-      log error "wrong sudo password"
+      gum_log error "wrong sudo password"
       auth
    fi
 }
@@ -98,68 +107,141 @@ if [[ ! -d "tmp" ]];then
    mkdir ./tmp
 fi
 
-if [[ ${options[skip-sources]} != true ]]; then
-   START_PATTERN="# ---BEGIN DOTFILES SOURCE---"
-   END_PATTERN="# ---END DOTFILES SOURCE---"
+if [ ! -f $HOME/.dotfilesrc ]; then
+   gum_log info "file $HOME/.dotfilesrc does not exits. creating"
 
+   if git rev-parse --git-dir > /dev/null 2>&1; then
+      cp ./.dotfilesrc ./tmp/.dotfilesrc
+   else
+      gum_log info "fetching dotfiles-commands"
+      curl -o ./tmp/.dotfilesrc https://raw.githubusercontent.com/pmqueiroz/dotfiles/master/.dotfilesrc
+   fi
+
+   sudo cp ./tmp/.dotfilesrc $HOME/.dotfilesrc
+fi
+
+SOURCE_START_PATTERN="# ---BEGIN DOTFILES SOURCE---"
+SOURCE_END_PATTERN="# ---END DOTFILES SOURCE---"
+
+function save_installed_sources {
+   local file_to_save=$1
+   local is_source=false
+
+   mapfile -t installed_sources_lines < "$HOME/.bashrc"
+
+   for line in "${installed_sources_lines[@]}"; do
+      if [ "$line" == "$SOURCE_START_PATTERN" ]; then
+         is_source=true
+         continue
+      elif [ "$line" == "$SOURCE_END_PATTERN" ]; then
+         is_source=false
+         continue
+      fi
+
+      if $is_source;then 
+         echo "$line" >> "$file_to_save"
+      fi
+   done
+}
+
+function remove_installed_sources {
+   local is_source=false
+   local tmp_source=$(mktemp)
+
+   mapfile -t installed_sources_lines < "$HOME/.bashrc"
+
+   for line in "${installed_sources_lines[@]}"; do
+      if [ "$line" == "$SOURCE_START_PATTERN" ]; then
+         is_source=true
+         continue
+      elif [ "$line" == "$SOURCE_END_PATTERN" ]; then
+         is_source=false
+         continue
+      fi
+
+      if ! $is_source;then 
+         echo "$line" >> "$tmp_source"
+      fi
+   done
+
+   cp "$tmp_source" "$HOME/.bashrc"
+
+   rm -rf "$tmp_source"
+}
+
+function install_sources {
+   gum_log info "adding sources to bash config file"
+   echo $SOURCE_START_PATTERN >> "$HOME/.bashrc" 
+   cat ./dots/sources.sh >> "$HOME/.bashrc"
+   echo $SOURCE_END_PATTERN >> "$HOME/.bashrc" 
+}
+
+if [[ ${options[skip-sources]} != true ]]; then
    installed_sources=$(mktemp)
-   awk "/${START_PATTERN}/,/${END_PATTERN}/" "$HOME/.bashrc" > $installed_sources
+   save_installed_sources "$installed_sources"
 
    if [ -s $installed_sources ];then
       installed_sum=$(checksum $installed_sources)
       sources_sum=$(checksum ./dots/sources.sh)
 
       if [ "$installed_sum" != "$sources_sum" ]; then
-         log info "source file is outdated. overwriting"
-         cp "$HOME/.bashrc" "$HOME/.bashrc.bak"
+         gum_log warn "source file is outdated. overwriting"
+         bashrc_bak_name=$HOME/.bashrc.$(date +%Y%m%d_%H%M%S).bak
+         gum_log info "creating a backup of .bashrc in $bashrc_bak_name"
          
-         awk -v replacement="$(<"./dots/sources.sh")" '
-            $0 ~ start {print replacement; skip = 1}
-            $0 ~ end {skip = 0; next}
-            !skip
-         ' start="$START_PATTERN" end="$END_PATTERN" "$HOME/.bashrc.bak" > "$HOME/.bashrc"
+         cp "$HOME/.bashrc" "$bashrc_bak_name"
+
+         remove_installed_sources
+
+         install_sources
       else
-         log warn "installed sources is ok. skip bash sources"
+         gum_log info "installed sources is up to date. skip bash sources"
       fi
    else
-      log info "adding sources to bash config file"
-      echo >> "$HOME/.bashrc"
-      cat ./dots/sources.sh >> "$HOME/.bashrc"
+      install_sources
    fi
 
    rm -rf $installed_sources
 else
-   log warn "skip bash sources"
+   gum_log warn "skip bash sources"
 fi
 
+
 if [[ ${options[skip-dependencies]} != true ]]; then
-   log info "installing dependencies"
+   gum_log info "installing dependencies"
 
    declare -a dependencies;
 
    dependencies+=( "essentials" )
    dependencies+=( "asdf" )
+   dependencies+=( "node" )
    dependencies+=( "code" )
    dependencies+=( "pnpm" )
-   dependencies+=( "node" )
 
    for dep in "${dependencies[@]}"; do 
-      log info "running $dep recipe"
+      gum_log info "running $dep recipe"
       eval install_$dep
-      source $HOME/.bashrc
+      . $HOME/.bashrc
    done
 else
-   log warn "skip dependencies install"
+   gum_log warn "skip dependencies install"
 fi
 
 if [[ ${options[skip-dots]} != true ]]; then
-   log info "configuring dotfiles"
+   gum_log info "configuring dotfiles"
+
+   if [ "$(uname)" == "Darwin" ]; then
+      CODE_SETTINGS_PATH="$HOME/Library/Application Support/Code/User/settings.json"
+      CODE_KEYBINDS_PATH="$HOME/Library/Application Support/Code/User/keybindings.json"
+   else
+      CODE_SETTINGS_PATH="$HOME/.config/Code/User/settings.json"
+      CODE_KEYBINDS_PATH="$HOME/.config/Code/User/keybindings.json"
+   fi
 
    declare -A dots=( 
-      ["vscode-settings.json"]="$HOME/.config/Code/User/settings.json"
-      ["keybindings.json"]="$HOME/.config/Code/User/keybindings.json"
+      ["vscode-settings.json"]="$CODE_SETTINGS_PATH"
+      ["keybindings.json"]="$CODE_KEYBINDS_PATH"
       [".gitconfig"]="$HOME/.gitconfig"
-      ["aliases.sh"]="/usr/bin/peam-commands"
       [".inputrc"]="$HOME/.inputrc"
       [".tmux.config"]="$HOME/.tmux.config"
    )
@@ -171,18 +253,18 @@ if [[ ${options[skip-dots]} != true ]]; then
       if git rev-parse --git-dir > /dev/null 2>&1; then
          cp dots/$dotfile ./tmp/$dotfile
       else
-         log info "fetching dot $dotfile"
+         gum_log info "fetching dot $dotfile"
          curl -o ./tmp/$dotfile https://raw.githubusercontent.com/pmqueiroz/dotfiles/master/dots/$dotfile
       fi
 
-      log info "setting dot $dotfile"
-      cat ./dots/$dotfile | render_string username $user_name email $user_email > ./tmp/$dotfile
-      sudo cp ./tmp/$dotfile $dotfile_path
-      sudo chmod a+w $dotfile_path
-      sudo chmod a+r $dotfile_path
+      gum_log info "setting dot $dotfile in $dotfile_path"
+      cat "./dots/$dotfile" | render_string username $user_name email $user_email > ./tmp/$dotfile
+      sudo cp "./tmp/$dotfile" "$dotfile_path"
+      sudo chmod a+w "$dotfile_path"
+      sudo chmod a+r "$dotfile_path"
    done
 else
-   log warn "skip settings install"
+   gum_log warn "skip settings install"
 fi
 
 gum confirm "Proceed with authentication?" --timeout 10s --default="No" || {
@@ -196,11 +278,11 @@ function continue_auth {
 }
 
 if [[ ${options[skip-ssh]} != true ]]; then
-   log info "starting github ssh auth"
+   gum_log info "starting github ssh auth"
 
    ls $HOME/.ssh | grep -q id_ed25519
    if [ $? -ne 0 ]; then
-      log info 'creating ssh key'
+      gum_log info 'creating ssh key'
       ssh-keygen -t ed25519 -C $user_email -f $HOME/.ssh/id_ed25519 -q -N ""
    fi
 
@@ -210,7 +292,7 @@ if [[ ${options[skip-ssh]} != true ]]; then
 
    gum join --align center --vertical "$HEADER" "$BODY" "$FOOTER"
 else
-   log warn "skipping github ssh auth"
+   gum_log warn "skipping github ssh auth"
 fi
 
 continue_auth
@@ -222,13 +304,13 @@ if [[ ${options[skip-npm-token]} != true ]]; then
 
    npx npm-cli-login -u $user_name -p $inputed_password -e $user_email -r https://npm.pkg.github.com
 else
-   log warn "skipping npm token auth"
+   gum_log warn "skipping npm token auth"
 fi
 
 continue_auth
 
 if [[ ${options[skip-git-configuring]} != true ]]; then
-   log info "generating gpg key"
+   gum_log info "generating gpg key"
 
    tmp_key_config=$(mktemp)
 
@@ -244,7 +326,7 @@ if [[ ${options[skip-git-configuring]} != true ]]; then
 
    gum join --align center --vertical "$HEADER" "$BODY" "$FOOTER"
 else
-   log warn "skipping git configuration"
+   gum_log warn "skipping git configuration"
 fi
 
 post_install

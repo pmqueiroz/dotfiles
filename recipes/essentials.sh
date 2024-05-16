@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 shopt -s expand_aliases
 
 function install_essentials {
    packages=(
       "xsel"
-      "ripgrep"
+      "rg"
       "neofetch"
       "tmux"
       "zoxide"
@@ -12,16 +12,18 @@ function install_essentials {
       "gh"
       "glow"
       "fzf"
+      "gpg"
    )
 
    for pkg in "${packages[@]}"; do
-      if ! command -v gum &> /dev/null; then
+      if ! command -v $pkg &> /dev/null; then
+         gum_log info "installing $pkg"
          _ brew install $pkg
          if [ $? -ne 0 ]; then
-            log error "failed to install $pkg"
+            gum_log error "failed to install $pkg"
          fi
       else
-         log warn "$pkg already installed. skipping"
+         gum_log warn "$pkg already installed. skipping"
       fi
    done
 }
