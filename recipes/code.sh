@@ -24,6 +24,7 @@ function install_code {
    extensions+=( "yoavbls.pretty-ts-errors" )
    extensions+=( "miguelsolorio.fluent-icons" )
    extensions+=( "drcika.apc-extension" )
+   extensions+=( "rust-lang.rust-analyzer" )
 
    installed_extensions=$(code --list-extensions)
 

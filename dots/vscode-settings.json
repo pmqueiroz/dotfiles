@@ -86,6 +86,10 @@
     "emmet.includeLanguages": {
         "javascript": "javascriptreact"
     },
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer",
+        "editor.formatOnSave": true
+    },
     "editor.codeActionsOnSave": {
         "source.fixAll": "explicit",
         "source.sortImports": "never"
