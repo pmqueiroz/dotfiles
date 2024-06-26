@@ -100,7 +100,7 @@ function checkout {
 
    git pull --rebase --quiet
 
-   local_branchs=$(git for-each-ref --format='%(refname:short)' refs/heads/ | sed s/$branch_to_checkout// )
+   local_branchs=$(git for-each-ref --format='%(refname:short)' refs/heads/ | sed /^$branch_to_checkout\$/d)
 
    if test -n "$local_branchs"; then
       gum_log info 'deleting other branches. was:'
