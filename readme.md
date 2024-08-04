@@ -19,18 +19,27 @@ Before running this script make sure you have the following installed:
    * [Git][git-url]
    * [Curl][curl-url]
    * [Homebrew][brew-url]
-   * [Visual Studio Code][code-url] _('code' need to bee installed in PATH)_
+   * [Visual Studio Code][code-url] (<kbd>code</kbd> need to bee installed in PATH)
 
 > **Warning** if you are in `macOS` make sure to update bash version
 
 ### Run
 
+### Recommended
+
+Clone the repo and then run the installer
+
+```sh
+git clone https://github.com/pmqueiroz/dotfiles.git
+cd dotfiles
+./install.sh
+```
+
+### Buggy one
+
 ```sh
 $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/pmqueiroz/dotfiles/release/install.sh)"
 ```
-> **Warning** This script must be used in a sudoer user, otherwise it will not work at all.
-
-...
 
 ### Options
 
