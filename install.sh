@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 shopt -s expand_aliases
-source .dotfilesrc
+source dots/aliases.sh
 
 if ! command -v brew &> /dev/null; then
    echo "[FATAL] brew is not installed. Please install Homebrew first."
@@ -108,17 +108,17 @@ if [[ ! -d "tmp" ]];then
    mkdir ./tmp
 fi
 
-if [ ! -f $HOME/.dotfilesrc ]; then
-   gum_log info "file $HOME/.dotfilesrc does not exits. creating"
+if [ ! -f $HOME/dots-aliases.sh ]; then
+   gum_log info "file $HOME/dots-aliases.sh does not exits. creating"
 
    if git rev-parse --git-dir > /dev/null 2>&1; then
-      cp ./.dotfilesrc ./tmp/.dotfilesrc
+      cp ./dots/aliases.sh ./tmp/dots-aliases.sh
    else
       gum_log info "fetching dotfiles-commands"
-      curl -o ./tmp/.dotfilesrc https://raw.githubusercontent.com/pmqueiroz/dotfiles/master/.dotfilesrc
+      curl -o ./tmp/dots-aliases.sh https://raw.githubusercontent.com/pmqueiroz/dotfiles/master/dots/aliases.sh
    fi
 
-   sudo cp ./tmp/.dotfilesrc $HOME/.dotfilesrc
+   sudo cp ./tmp/dots-aliases.sh $HOME/dots-aliases.sh
 fi
 
 SOURCE_START_PATTERN="# ---BEGIN DOTFILES SOURCE---"
