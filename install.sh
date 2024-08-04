@@ -32,6 +32,7 @@ source recipes/code.sh
 source recipes/essentials.sh
 source recipes/node.sh
 source recipes/pnpm.sh
+source recipes/cask.sh
 
 declare -A options;
 for opt in $@; do 
@@ -206,9 +207,9 @@ else
    gum_log warn "skip bash sources"
 fi
 
-
 if [[ ${options[skip-dependencies]} != true ]]; then
-   gum_log info "installing dependencies"
+   gum_log info "dependencies"
+   gum_log info "selected dependencies to install"
 
    declare -a dependencies;
 
@@ -218,7 +219,17 @@ if [[ ${options[skip-dependencies]} != true ]]; then
    dependencies+=( "code" )
    dependencies+=( "pnpm" )
 
-   for dep in "${dependencies[@]}"; do 
+   declare -a additional_dependencies;
+
+   additional_dependencies+=( "cask" )
+   additional_dependencies+=( "android" )
+
+   all_choices="${dependencies[@]} ${additional_dependencies[@]}"
+   selected=$(printf '%s\n' "$(IFS=,; printf '%s' "${dependencies[*]}")")
+
+   readarray -t choosen_dependencies <<< "$(echo "$all_choices" | xargs gum choose --selected=${selected} --no-limit --header "use arrow keys and space to select")"
+
+   for dep in "${choosen_dependencies[@]}"; do 
       gum_log info "running $dep recipe"
       eval install_$dep
       . $HOME/.bashrc
@@ -267,7 +278,7 @@ else
    gum_log warn "skip settings install"
 fi
 
-gum confirm "Proceed with authentication?" --timeout 10s --default="No" || {
+gum confirm "proceed with authentication?" --timeout 10s --default="No" || {
    post_install
    exit 0
 }
@@ -295,9 +306,10 @@ else
    gum_log warn "skipping github ssh auth"
 fi
 
-continue_auth
 
 if [[ ${options[skip-npm-token]} != true ]]; then
+   continue_auth
+
    gum join --align center --horizontal "$(gum style --foreground 212 --margin 1 'Generate a new token in')" "$(gum style --foreground 222 --margin 1 'https://github.com/settings/tokens/new')"
    gum style --foreground 212	--margin 1 'Input your generated password'
    inputed_password=$(gum input --placeholder 'gpg_...')
@@ -307,9 +319,9 @@ else
    gum_log warn "skipping npm token auth"
 fi
 
-continue_auth
+if [[ ${options[skip-git]} != true ]]; then
+   continue_auth
 
-if [[ ${options[skip-git-configuring]} != true ]]; then
    gum_log info "generating gpg key"
 
    tmp_key_config=$(mktemp)

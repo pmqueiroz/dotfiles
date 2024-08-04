@@ -51,7 +51,7 @@ $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/pmqueiroz/dotfile
 | <kbd>--skip-dots</kbd> | skip settings install |
 | <kbd>--skip-ssh</kbd> | skip setting ssh key to github |
 | <kbd>--skip-npm-token</kbd> | skip setting personal access token to npm user |
-| <kbd>--skip-git-configuring</kbd> | skip configuring git |
+| <kbd>--skip-git</kbd> | skip git configuration |
 
 <div align="center">
 
