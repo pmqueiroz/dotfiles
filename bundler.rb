@@ -6,7 +6,7 @@ def main
   output = []
 
   process_script("install.sh", processed_files, output)
-  File.write("release.sh", output.join("\n"))
+  File.write("install.sh", output.join("\n"))
 end
 
 def process_script(file_path, processed_files, output)
