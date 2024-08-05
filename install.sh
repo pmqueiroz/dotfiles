@@ -33,6 +33,7 @@ source recipes/essentials.sh
 source recipes/node.sh
 source recipes/pnpm.sh
 source recipes/cask.sh
+source recipes/gnome-terminal.sh
 
 declare -A options;
 for opt in $@; do 
@@ -74,7 +75,7 @@ function post_install {
       "$(gum style --foreground 211 --italic --faint 'do not forget to gimme a star on github')" \
       "$(gum style --foreground 211 --italic --faint 'https://github.com/pmqueiroz/dotfiles')"
 
-   sudo rm -rf ./tmp
+   rm -rf ./tmp
    sudo --reset-timestamp
 }
 
@@ -223,6 +224,7 @@ if [[ ${options[skip-dependencies]} != true ]]; then
 
    additional_dependencies+=( "cask" )
    additional_dependencies+=( "android" )
+   additional_dependencies+=( "gnome_terminal" )
 
    all_choices="${dependencies[@]} ${additional_dependencies[@]}"
    selected=$(printf '%s\n' "$(IFS=,; printf '%s' "${dependencies[*]}")")

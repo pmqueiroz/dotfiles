@@ -23,4 +23,4 @@ use-system-font=false
 use-theme-colors=false
 use-theme-transparency=false
 use-transparent-background=true
-visible-name='peam'
+visible-name='{{username}}'
