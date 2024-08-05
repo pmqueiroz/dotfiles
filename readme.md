@@ -8,7 +8,8 @@
 <!-- END_VARS -->
 
 <div align="center" >
-   <img src="./.github/assets/logo_wo_blur.svg" width=300>
+   <img src="./.github/assets/white-logo.svg#gh-dark-mode-only" width=300>
+   <img src="./.github/assets/black-logo.svg#gh-light-mode-only" width=300>
 
    _just let the magic happens_
 </div>
