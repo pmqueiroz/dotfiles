@@ -255,7 +255,6 @@ if [[ ${options[skip-dots]} != true ]]; then
       ["vscode-settings.json"]="$CODE_SETTINGS_PATH"
       ["keybindings.json"]="$CODE_KEYBINDS_PATH"
       [".gitconfig"]="$HOME/.gitconfig"
-      [".inputrc"]="$HOME/.inputrc"
       [".tmux.config"]="$HOME/.tmux.config"
    )
 
