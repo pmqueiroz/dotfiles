@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "*.json": "jsonc",
+    "*.dconf": "ini"
+  }
+}
