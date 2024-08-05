@@ -35,7 +35,7 @@ cd dotfiles
 ./install.sh
 ```
 
-### Buggy one
+### More Unstable
 
 ```sh
 $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/pmqueiroz/dotfiles/release/install.sh)"
