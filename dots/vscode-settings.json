@@ -2,14 +2,13 @@
     "extensions.ignoreRecommendations": true,
     "security.workspace.trust.untrustedFiles": "open",
     "diffEditor.ignoreTrimWhitespace": false,
-    "symbols.hidesExplorerArrows": false,
-    "breadcrumbs.enabled": false,
-    "update.showReleaseNotes": false,
     "update.mode": "start",
+    "update.showReleaseNotes": false,
+    "breadcrumbs.enabled": false,
     "window.commandCenter": false,
     "window.titleBarStyle": "custom",
     "window.zoomLevel": 1,
-    "window.density.editorTabHeight": "compact",
+    "window.density.editorTabHeight": "default",
     "workbench.editor.labelFormat": "short",
     "workbench.editor.empty.hint": "hidden",
     "workbench.productIconTheme": "fluent-icons",
@@ -17,6 +16,7 @@
     "workbench.iconTheme": "material-icon-theme",
     "workbench.colorTheme": "Aura Soft Dark",
     "workbench.startupEditor": "none",
+    "workbench.activityBar.location": "bottom",
     "explorer.fileNesting.enabled": true,
     "explorer.confirmDragAndDrop": false,
     "explorer.confirmDelete": false,
@@ -35,51 +35,22 @@
     "editor.suggest.preview": true,
     "editor.suggest.showDeprecated": true,
     "editor.inlineSuggest.enabled": true,
+    "editor.inlayHints.maximumLength": 15,
     "editor.bracketPairColorization.enabled": true,
+    "editor.experimentalEditContextEnabled": true,
+    "editor.lightbulb.enabled": "on",
     /* Font configuration */
     "editor.fontLigatures": true,
     "editor.fontSize": 19,
     "editor.lineHeight": 26,
     "editor.fontFamily": "'Fira Code', 'JetBrains Mono', monospace",
-    /* Terminal Interface */
-    "terminal.integrated.cursorStyle": "underline",
-    "terminal.integrated.fontSize": 16,
-    "terminal.integrated.gpuAcceleration": "on",
-    "terminal.integrated.defaultLocation": "editor",
-    "terminal.integrated.shellIntegration.enabled": false,
-    "terminal.integrated.enableMultiLinePasteWarning": "never",
-    "terminal.integrated.profiles.linux": {
-        "yarn": {
-            "path": "zsh",
-            "icon": "flame",
-            "color": "terminal.ansiRed",
-            "overrideName": true,
-            "args": [
-                "--beep"
-            ]
-        },
-        "git": {
-            "path": "zsh",
-            "icon": "git-pull-request",
-            "color": "terminal.ansiGreen",
-            "overrideName": true
-        },
-        "peam": {
-            "path": "zsh",
-            "icon": "heart",
-            "color": "terminal.ansiMagenta",
-            "overrideName": true,
-            "args": [
-                "--beep"
-            ]
-        }
-    },
-    "terminal.integrated.defaultProfile.linux": "peam",
-    "terminal.integrated.enableBell": true,
-    "terminal.integrated.enablePersistentSessions": false,
+    /* Linting and intellisense */
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
-    /* Linting and intellisense */
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit",
+        "source.sortImports": "never"
+    },
     "emmet.syntaxProfiles": {
         "javascript": "jsx"
     },
@@ -90,9 +61,11 @@
         "editor.defaultFormatter": "rust-lang.rust-analyzer",
         "editor.formatOnSave": true
     },
-    "editor.codeActionsOnSave": {
-        "source.fixAll": "explicit",
-        "source.sortImports": "never"
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     /* Language configuration */
     "javascript.updateImportsOnFileMove.enabled": "always",
@@ -108,32 +81,6 @@
         ".prettierrc": "json"
     },
     /* Extensions and Modules configuration */
-    "apc.activityBar": {
-        "position": "bottom",
-        "hideSettings": true,
-        "size": 48,
-        "itemMargin": 8,
-        "itemSize": 32
-    },
-    "apc.header": {
-        "height": 36
-    },
-    "apc.listRow": {
-        "height": 24
-    },
-    "apc.font.family": "Inter",
-    "apc.stylesheet": {             
-        ".title-label": "display: none",
-        ".editor-actions": "display: none",
-        ".nosidebar .inline-tabs-placeholder": "width: 75px",
-        ".pane-header": "padding: 0 8px",
-        ".window-appicon": "display: none",
-        ".window-title": "display: none",
-        ".menubar": "padding-left: 8px",
-        ".menubar-menu-button": "opacity: 0",
-        ".menubar-menu-button:hover": "opacity: 1",
-        ".actions-container": "justify-content: flex-start!important"
-    },
     "material-icon-theme.folders.associations": {
         "fake": "mock",
         "infra": "app",
@@ -161,9 +108,8 @@
         "tsconfig.json": "tune",
         "ormconfig.json": "database",
         "*.template.svg": "ejs",
-        "*.u": "../../icons/umbra-moon",
-        "*.umb": "../../icons/umbra-moon",
-        "*.ub": "../../icons/umbra-moon"
+        "*.u": "../../icons/umbra",
+        "*.umb": "../../icons/umbra"
     },
     "cSpell.language": "en,pt",
     "cSpell.userWords": [
@@ -211,18 +157,18 @@
         "yml",
         "lua"
     ],
-    "github.copilot.inlineSuggest.enable": true,
     "github.copilot.enable": {
         "*": true,
         "yaml": false,
         "plaintext": false,
         "markdown": false,
-        "javascript": true
     },
+    "github.copilot.editor.enableAutoCompletions": true,
     "eslint.rules.customizations": [
         {
             "rule": "react-hooks/exhaustive-deps",
             "severity": "off"
         }
-    ]
+    ],
+    "git.openRepositoryInParentFolders": "always"
 }
