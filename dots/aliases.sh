@@ -33,7 +33,7 @@ function git_pr_style {
 
 function fpush {
    if ! git rev-parse --is-inside-work-tree &> /dev/null; then
-      gum_log error "not a git repository"
+      gum_log fatal "not a git repository"
       return 128
    fi
 
@@ -45,7 +45,7 @@ function fpush {
 
 function commit {
    if ! git rev-parse --is-inside-work-tree &> /dev/null; then
-      gum_log error "not a git repository"
+      gum_log fatal "not a git repository"
       return 128
    fi
    declare -a commit_options;
@@ -98,7 +98,7 @@ function get_branch_by_number {
 
 function checkout {
    if ! git rev-parse --is-inside-work-tree &> /dev/null; then
-      gum_log error "not a git repository"
+      gum_log fatal "not a git repository"
       return 128
    fi
 
@@ -112,7 +112,7 @@ function checkout {
           branch_by_number=$(get_branch_by_number "$1")
 
          if [ $? -ne 0 ]; then
-            gum_log error "could not determine branch to $(git_pr_style "$1")"
+            gum_log fatal "could not determine branch to $(git_pr_style "$1")"
             return 1
          fi
 
