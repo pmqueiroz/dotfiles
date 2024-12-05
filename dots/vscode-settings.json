@@ -39,6 +39,7 @@
     "editor.bracketPairColorization.enabled": true,
     "editor.experimentalEditContextEnabled": true,
     "editor.lightbulb.enabled": "on",
+    "editor.linkedEditing": true,
     /* Font configuration */
     "editor.fontLigatures": true,
     "editor.fontSize": 19,
