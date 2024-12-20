@@ -6,6 +6,7 @@ alias glo='git log --oneline'
 alias repo='gh repo view --web'
 alias debug='gum log -s -t kitchen -l debug'
 alias gum_log='gum log -t kitchen -l'
+alias date='gdate'
 
 function pr {
    gh pr view --json number -q '.number' &> /dev/null
@@ -39,8 +40,7 @@ function fpush {
 
    branch=$(git branch --show-current)
    gum_log info "pushing and setting upstream to $(git_branch_style "$branch")"
-
-   git push "$1" --set-upstream origin "$branch" "$2"
+   git push $1 --set-upstream origin "$branch" $2
 }
 
 function commit {
