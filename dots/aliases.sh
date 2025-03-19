@@ -40,7 +40,7 @@ function fpush {
 
    branch=$(git branch --show-current)
    gum_log info "pushing and setting upstream to $(git_branch_style "$branch")"
-   git push $1 --set-upstream origin "$branch" $2
+   git push "$1" --set-upstream origin "$branch" "$2"
 }
 
 function commit {
@@ -169,4 +169,20 @@ function hot {
       sleep .5;
    done
   fi
+}
+
+function penv() {
+  local offset=8
+  local splitted_offset=$((offset / 2))
+  local env=$1
+  local length=${#env}
+
+  if [ "$length" -lt $offset ]; then
+    echo "Env var is too short"
+    return
+  fi
+
+  local stars
+  stars="$(printf "%0.s*" $(seq 1 $((length - offset))))"
+  echo "${env:0:splitted_offset}${stars}${env: -splitted_offset}"
 }
