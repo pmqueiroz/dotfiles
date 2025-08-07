@@ -45,8 +45,8 @@ done
 logfile="peam_dotfiles_$(date +%Y%m%d_%H%M%S).log"
 
 function _ {
-   [ "$1" = gum_log ] || gum_log debug -- "running command: $@" &>> $logfile
-   [ "${options[verbose]}" = true ] && eval $@ || eval $@ &>> $logfile
+   [ "$1" = gum_log ] || gum_log debug -- "running command: $@" &>> "$logfile"
+   [ "${options[verbose]}" = true ] && eval $@ || eval $@ &>> "$logfile"
 }
 
 function loader {
@@ -94,7 +94,7 @@ _ gum_log debug "email $user_email"
 
 function auth {
    passphrase=$(gum input --password --placeholder 'your sudo password')
-   echo $passphrase | sudo -Sv -p ""
+   echo "$passphrase" | sudo -Sv -p ""
 
    authenticated=$?
    if [ $authenticated -ne 0 ] ;then
@@ -109,7 +109,7 @@ if [[ ! -d "tmp" ]];then
    mkdir ./tmp
 fi
 
-if [ ! -f $HOME/dots-aliases.sh ]; then
+if [ ! -f "$HOME"/dots-aliases.sh ]; then
    gum_log info "file $HOME/dots-aliases.sh does not exits. creating"
 
    if git rev-parse --git-dir > /dev/null 2>&1; then
@@ -119,7 +119,7 @@ if [ ! -f $HOME/dots-aliases.sh ]; then
       curl -o ./tmp/dots-aliases.sh https://raw.githubusercontent.com/pmqueiroz/dotfiles/master/dots/aliases.sh
    fi
 
-   sudo cp ./tmp/dots-aliases.sh $HOME/dots-aliases.sh
+   sudo cp ./tmp/dots-aliases.sh "$HOME"/dots-aliases.sh
 fi
 
 SOURCE_START_PATTERN="# ---BEGIN DOTFILES SOURCE---"
@@ -173,17 +173,17 @@ function remove_installed_sources {
 
 function install_sources {
    gum_log info "adding sources to bash config file"
-   echo $SOURCE_START_PATTERN >> "$HOME/.bashrc" 
+   echo "$SOURCE_START_PATTERN" >> "$HOME/.bashrc" 
    cat ./dots/sources.sh >> "$HOME/.bashrc"
-   echo $SOURCE_END_PATTERN >> "$HOME/.bashrc" 
+   echo "$SOURCE_END_PATTERN" >> "$HOME/.bashrc" 
 }
 
 if [[ ${options[skip-sources]} != true ]]; then
    installed_sources=$(mktemp)
    save_installed_sources "$installed_sources"
 
-   if [ -s $installed_sources ];then
-      installed_sum=$(checksum $installed_sources)
+   if [ -s "$installed_sources" ];then
+      installed_sum=$(checksum "$installed_sources")
       sources_sum=$(checksum ./dots/sources.sh)
 
       if [ "$installed_sum" != "$sources_sum" ]; then
@@ -203,7 +203,7 @@ if [[ ${options[skip-sources]} != true ]]; then
       install_sources
    fi
 
-   rm -rf $installed_sources
+   rm -rf "$installed_sources"
 else
    gum_log warn "skip bash sources"
 fi
@@ -229,12 +229,12 @@ if [[ ${options[skip-dependencies]} != true ]]; then
    all_choices="${dependencies[@]} ${additional_dependencies[@]}"
    selected=$(printf '%s\n' "$(IFS=,; printf '%s' "${dependencies[*]}")")
 
-   readarray -t choosen_dependencies <<< "$(echo "$all_choices" | xargs gum choose --selected=${selected} --no-limit --header "use arrow keys and space to select")"
+   readarray -t choosen_dependencies <<< "$(echo "$all_choices" | xargs gum choose --selected="${selected}" --no-limit --header "use arrow keys and space to select")"
 
    for dep in "${choosen_dependencies[@]}"; do 
       gum_log info "running $dep recipe"
-      eval install_$dep
-      . $HOME/.bashrc
+      eval install_"$dep"
+      . "$HOME"/.bashrc
    done
 else
    gum_log warn "skip dependencies install"
@@ -260,17 +260,17 @@ if [[ ${options[skip-dots]} != true ]]; then
 
    for dotfile in "${!dots[@]}"; do 
       dotfile_path=${dots[$dotfile]}
-      mkdir -p $(dirname $dotfile_path)
+      mkdir -p $(dirname "$dotfile_path")
 
       if git rev-parse --git-dir > /dev/null 2>&1; then
-         cp dots/$dotfile ./tmp/$dotfile
+         cp dots/"$dotfile" ./tmp/"$dotfile"
       else
          gum_log info "fetching dot $dotfile"
-         curl -o ./tmp/$dotfile https://raw.githubusercontent.com/pmqueiroz/dotfiles/master/dots/$dotfile
+         curl -o ./tmp/"$dotfile" https://raw.githubusercontent.com/pmqueiroz/dotfiles/master/dots/"$dotfile"
       fi
 
       gum_log info "setting dot $dotfile in $dotfile_path"
-      cat "./dots/$dotfile" | render_string username $user_name email $user_email > ./tmp/$dotfile
+      cat "./dots/$dotfile" | render_string username "$user_name" email "$user_email" > ./tmp/"$dotfile"
       sudo cp "./tmp/$dotfile" "$dotfile_path"
       sudo chmod a+w "$dotfile_path"
       sudo chmod a+r "$dotfile_path"
@@ -292,14 +292,14 @@ function continue_auth {
 if [[ ${options[skip-ssh]} != true ]]; then
    gum_log info "starting github ssh auth"
 
-   ls $HOME/.ssh | grep -q id_ed25519
+   ls "$HOME"/.ssh | grep -q id_ed25519
    if [ $? -ne 0 ]; then
       gum_log info 'creating ssh key'
-      ssh-keygen -t ed25519 -C $user_email -f $HOME/.ssh/id_ed25519 -q -N ""
+      ssh-keygen -t ed25519 -C "$user_email" -f "$HOME"/.ssh/id_ed25519 -q -N ""
    fi
 
    HEADER=$(gum style --foreground 212	--margin 1 'Copy this ssh key bellow')
-   BODY=$(gum style --margin "0 1" --padding "1" --foreground 15 --background 10 "$(cat $HOME/.ssh/id_ed25519.pub)")
+   BODY=$(gum style --margin "0 1" --padding "1" --foreground 15 --background 10 "$(cat "$HOME"/.ssh/id_ed25519.pub)")
    FOOTER=$(gum join --align center --horizontal "$(gum style --foreground 212 --margin 1 'and paste on')" "$(gum style --foreground 222 --margin 1 'https://github.com/settings/ssh/new')")
 
    gum join --align center --vertical "$HEADER" "$BODY" "$FOOTER"
@@ -315,7 +315,7 @@ if [[ ${options[skip-npm-token]} != true ]]; then
    gum style --foreground 212	--margin 1 'Input your generated password'
    inputed_password=$(gum input --placeholder 'gpg_...')
 
-   npx npm-cli-login -u $user_name -p $inputed_password -e $user_email -r https://npm.pkg.github.com
+   npx --yes npm-cli-login -u "$user_name" -p "$inputed_password" -e "$user_email" -r https://npm.pkg.github.com
 else
    gum_log warn "skipping npm token auth"
 fi
@@ -327,14 +327,14 @@ if [[ ${options[skip-git]} != true ]]; then
 
    tmp_key_config=$(mktemp)
 
-   cat ./dots/gpg_template.gpg | render_string username $user_name email $user_email passphrase $passphrase > $tmp_key_config
+   cat ./dots/gpg_template.gpg | render_string username "$user_name" email "$user_email" passphrase "$passphrase" > "$tmp_key_config"
 
-   _ gpg --batch --gen-key $tmp_key_config
+   _ gpg --batch --gen-key "$tmp_key_config"
 
    generated_gpg=$(gpg --list-secret-keys --keyid-format=long | perl -lne 'print $1 if /sec\s+rsa4096\/([0-9A-Z]{16} )/' | tail -n 1)
 
    HEADER=$(gum style --foreground 212	--margin 1 'Copy this gpg key bellow')
-   BODY=$(gum style --margin "0 1" --padding "1" --foreground 15 --background 10 -- "$(gpg --armor --export $generated_gpg)")
+   BODY=$(gum style --margin "0 1" --padding "1" --foreground 15 --background 10 -- "$(gpg --armor --export "$generated_gpg")")
    FOOTER=$(gum join --align center --horizontal "$(gum style --foreground 212 --margin 1 'and paste on')" "$(gum style --foreground 222 --margin 1 'https://github.com/settings/gpg/new')")
 
    gum join --align center --vertical "$HEADER" "$BODY" "$FOOTER"
