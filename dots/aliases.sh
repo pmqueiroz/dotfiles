@@ -6,7 +6,18 @@ alias glo='git log --oneline'
 alias repo='gh repo view --web'
 alias debug='gum log -s -t kitchen -l debug'
 alias gum_log='gum log -t kitchen -l'
-alias date='gdate'
+
+case "$OSTYPE" in
+  darwin*)
+   alias date='gdate'
+   ;;
+  linux*)
+   alias date='date'
+   ;;
+  *)
+   alias date='date'
+   ;;
+esac
 
 function pr {
    gh pr view --json number -q '.number' &> /dev/null
