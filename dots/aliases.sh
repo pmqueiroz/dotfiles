@@ -40,7 +40,7 @@ function fpush {
 
    branch=$(git branch --show-current)
    gum_log info "pushing and setting upstream to $(git_branch_style "$branch")"
-   git push "$1" --set-upstream origin "$branch" "$2"
+   git push --set-upstream origin "$branch"
 }
 
 function commit {
