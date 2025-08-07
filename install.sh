@@ -1,6 +1,202 @@
-#!/usr/bin/env bash
 shopt -s expand_aliases
-source dots/aliases.sh
+
+shopt -s expand_aliases
+
+alias glo='git log --oneline'
+alias repo='gh repo view --web'
+alias debug='gum log -s -t kitchen -l debug'
+alias gum_log='gum log -t kitchen -l'
+
+case "$OSTYPE" in
+  darwin*)
+   alias date='gdate'
+   ;;
+  linux*)
+   alias date='date'
+   ;;
+  *)
+   alias date='date'
+   ;;
+esac
+
+function pr {
+   gh pr view --json number -q '.number' &> /dev/null
+
+   if [ $? -ne 0 ]; then
+      title=$(commit_title $(git branch --show-current))
+      gh pr create --assignee @me --title "$title" --web "$@"
+      return 
+   fi
+
+   gh pr view --web
+}
+
+function commit_title {
+   echo "$1" | awk '{gsub("/",": "); print}' | awk '{gsub("-"," "); print}'
+}
+
+function git_branch_style {
+  gum style "🌿 $(gum style --bold --underline --foreground "#BD93F9" "$@")"
+}
+
+function git_pr_style {
+  gum style "$(gum style --foreground "#FF79C6" '#')$(gum style --bold --underline --foreground "#BD93F9" "$@")"
+}
+
+function fpush {
+   if ! git rev-parse --is-inside-work-tree &> /dev/null; then
+      gum_log fatal "not a git repository"
+      return 128
+   fi
+
+   branch=$(git branch --show-current)
+   gum_log info "pushing and setting upstream to $(git_branch_style "$branch")"
+   git push --set-upstream origin "$branch"
+}
+
+function commit {
+   if ! git rev-parse --is-inside-work-tree &> /dev/null; then
+      gum_log fatal "not a git repository"
+      return 128
+   fi
+   declare -a commit_options;
+   declare -a inputted_message;
+
+   for arg in "$@"; do
+      if [[ $arg == -* ]]; then
+         commit_options+=( "$arg" )
+      else
+         inputted_message+=( "$arg" )
+      fi
+      shift
+   done
+
+   inputted_message="${inputted_message[@]}"
+
+   git add .
+
+   if test -z "$inputted_message"
+   then
+      commitmsg=$(commit_title "$(git branch --show-current)")
+   else
+      commitmsg="$inputted_message"
+   fi
+
+   gum_log info "commiting files with message $(git_branch_style "$commitmsg")"
+
+   gum style --foreground 12 --margin "0 1" -- "$(git diff --name-only --cached)"
+
+   gum confirm "confirm?" && git commit -m "${commitmsg}" "${commit_options[@]}" || {
+      gum_log error exiting...
+      git reset
+   }
+}
+
+function get_branch_by_number {
+    local pr_number=$1
+    local repo_name
+    local branch_name
+
+    repo_name=$(gh repo view --json nameWithOwner --jq '.nameWithOwner')
+    branch_name=$(gh pr view "$pr_number" --json headRefName --repo "$repo_name" --jq '.headRefName' 2>/dev/null)
+
+    if [ $? -ne 0 ]; then
+        return 1
+    fi
+
+    echo "$branch_name"
+}
+
+function checkout {
+   if ! git rev-parse --is-inside-work-tree &> /dev/null; then
+      gum_log fatal "not a git repository"
+      return 128
+   fi
+
+   current_branch=$(git branch --show-current)
+
+   if test -z "$1"; then
+      branch_to_checkout=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')
+   else
+      if [[ $1 =~ ^[0-9]+$ ]]; then
+         gum_log info "fetching branch to $(git_pr_style "$1")"
+          branch_by_number=$(get_branch_by_number "$1")
+
+         if [ $? -ne 0 ]; then
+            gum_log fatal "could not determine branch to $(git_pr_style "$1")"
+            return 1
+         fi
+
+         branch_to_checkout="$branch_by_number"
+      else
+         branch_to_checkout="$1"
+      fi
+   fi
+
+   if [ "$current_branch" != "$branch_to_checkout" ]; then
+      gum_log info "checking out to $(git_branch_style "$branch_to_checkout")"
+      git checkout --quiet "$branch_to_checkout"
+   fi
+
+   gum_log info "updating current branch"
+
+   git pull --rebase --quiet
+
+   local_branchs=$(git for-each-ref --format='%(refname:short)' refs/heads/ | grep -v "^$branch_to_checkout$")
+
+   if test -n "$local_branchs"; then
+      gum_log info 'deleting other branches. was:'
+      for branch in "${local_branchs[@]}"; do 
+         git_branch_style "$branch"
+      done
+
+      echo "$local_branchs" | xargs git branch -q -D
+   fi
+}
+
+function run_node {
+   tmp_file=$(mktemp --suffix=.js)
+   code "$tmp_file" --wait
+   file_content=$(cat "${tmp_file}")
+   node -p -e "${file_content}"
+   rm -rf "$tmp_file"
+}
+
+function checksum {
+   md5sum "$1" | awk '{ print $1 }'
+}
+
+function hot {
+  if (( $# < 2 )); then
+   gum_log error 'USAGE: hot <command> <file1> [<file2> ... <fileN>]'
+  else
+   script=$1
+   shift
+   a='';
+
+   while true; do
+      b=$(ls -l "$*")
+      [[ $a != $b ]] && a=$b && eval "$script";
+      sleep .5;
+   done
+  fi
+}
+
+function penv() {
+  local offset=8
+  local splitted_offset=$((offset / 2))
+  local env=$1
+  local length=${#env}
+
+  if [ "$length" -lt $offset ]; then
+    echo "Env var is too short"
+    return
+  fi
+
+  local stars
+  stars="$(printf "%0.s*" $(seq 1 $((length - offset))))"
+  echo "${env:0:splitted_offset}${stars}${env: -splitted_offset}"
+}
 
 if ! command -v brew &> /dev/null; then
    echo "[FATAL] brew is not installed. Please install Homebrew first."
@@ -27,13 +223,141 @@ if ! command -v md5sum &> /dev/null; then
    fi
 fi
 
-source recipes/asdf.sh
-source recipes/code.sh
-source recipes/essentials.sh
-source recipes/node.sh
-source recipes/pnpm.sh
-source recipes/cask.sh
-source recipes/gnome-terminal.sh
+
+shopt -s expand_aliases 
+
+function install_asdf {
+   local asdf_folder=$HOME/.asdf
+
+   if [ -d "$asdf_folder" ]; then
+      gum_log warn "asdf already installed. skipping"
+   else 
+      local asdf_version=$(curl -s https://api.github.com/repos/asdf-vm/asdf/releases | jq -r '.[0].tag_name')
+      git config --global advice.detachedHead false
+      _ git clone https://github.com/asdf-vm/asdf.git ~/.asdf --single-branch --branch "$asdf_version"
+
+      echo 'source $HOME/.asdf/asdf.sh' >> "$HOME"/.bashrc
+   fi
+}
+shopt -s expand_aliases
+
+function install_code {
+   if ! command -v code &> /dev/null; then
+      gum_log error "make sure vscode is installed and the code command is added to PATH"
+      exit 1
+   fi
+
+   declare -a extensions;
+
+   extensions+=( "naumovs.color-highlight" )
+   extensions+=( "dracula-theme.theme-dracula" )
+   extensions+=( "DaltonMenezes.aura-theme" )
+   extensions+=( "pkief.material-icon-theme" )
+   extensions+=( "styled-components.vscode-styled-components" )
+   extensions+=( "wix.vscode-import-cost" )
+   extensions+=( "streetsidesoftware.code-spell-checker" )
+   extensions+=( "streetsidesoftware.code-spell-checker-portuguese-brazilian" )
+   extensions+=( "eamodio.gitlens" )
+   extensions+=( "moyu.snapcode" )
+   extensions+=( "formulahendry.auto-rename-tag" )
+   extensions+=( "dbaeumer.vscode-eslint" )
+   extensions+=( "yoavbls.pretty-ts-errors" )
+   extensions+=( "miguelsolorio.fluent-icons" )
+   extensions+=( "drcika.apc-extension" )
+   extensions+=( "rust-lang.rust-analyzer" )
+
+   installed_extensions=$(code --list-extensions)
+
+   for ext in "${extensions[@]}"; do
+      echo "${installed_extensions[@]}" | grep -iq $ext
+      already_installed=$?
+
+      if [[ $already_installed -ne 0 ]]; then
+         gum_log info "installing $ext"
+         code --install-extension $ext
+      else
+         gum_log warn "code extension $ext already installed. skipping"
+      fi
+   done
+}
+shopt -s expand_aliases
+
+function install_essentials {
+   packages=(
+      "xsel"
+      "rg"
+      "neofetch"
+      "tmux"
+      "zoxide"
+      "jq"
+      "gh"
+      "glow"
+      "fzf"
+      "gpg"
+   )
+
+   for pkg in "${packages[@]}"; do
+      if ! command -v $pkg &> /dev/null; then
+         gum_log info "installing $pkg"
+         _ brew install $pkg
+         if [ $? -ne 0 ]; then
+            gum_log error "failed to install $pkg"
+         fi
+      else
+         gum_log warn "$pkg already installed. skipping"
+      fi
+   done
+}
+shopt -s expand_aliases
+
+function install_node {
+   _ asdf plugin add nodejs
+   _ asdf install nodejs 18.20.2
+   _ asdf global nodejs 18.20.2
+}
+shopt -s expand_aliases
+
+function install_pnpm {
+   if ! command -v pnpm &> /dev/null; then
+      _ asdf plugin-add pnpm
+      _ asdf install pnpm latest
+      _ asdf global pnpm latest
+   else 
+      gum_log warn "pnpm already installed. skipping"
+   fi
+}
+
+shopt -s expand_aliases
+
+function install_cask {
+  cask=(
+    "slack"
+    "visual-studio-code"
+    "warp"
+    "firefox"
+    "obs"
+    "figma"
+  )
+
+  for pkg in "${cask[@]}"; do
+    brew install --cask $pkg
+  done
+}
+
+shopt -s expand_aliases
+
+function install_gnome_terminal {
+  if [[ "$(uname -s)" == "Linux" ]]; then
+    if [[ "$DESKTOP_SESSION" == "gnome" || "$XDG_CURRENT_DESKTOP" == "GNOME" ]]; then
+      cat "./dots/gnome-terminal-profile.dconf" | render_string username $user_name email $user_email > ./tmp/gnome-terminal-profile.dconf
+      dconf load /org/gnome/terminal/legacy/profiles:/ < ./tmp/gnome-terminal-profile.dconf
+    else
+      gum_log error "GNOME is not the desktop environment. Failed to install gnome-terminal profile"
+    fi
+  else
+    gum_log error "os is not Linux. Failed to install gnome-terminal profile"
+  fi
+}
 
 declare -A options;
 for opt in $@; do 
