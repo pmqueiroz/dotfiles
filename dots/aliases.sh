@@ -43,17 +43,6 @@ function git_pr_style {
   gum style "$(gum style --foreground "#FF79C6" '#')$(gum style --bold --underline --foreground "#BD93F9" "$@")"
 }
 
-function fpush {
-   if ! git rev-parse --is-inside-work-tree &> /dev/null; then
-      gum_log fatal "not a git repository"
-      return 128
-   fi
-
-   branch=$(git branch --show-current)
-   gum_log info "pushing and setting upstream to $(git_branch_style "$branch")"
-   git push --set-upstream origin "$branch" "$@"
-}
-
 function commit {
    if ! git rev-parse --is-inside-work-tree &> /dev/null; then
       gum_log fatal "not a git repository"

@@ -8,4 +8,8 @@
 [commit]
 	gpgsign = true
 [alias]
-   l = log --pretty=format:\"%h - %an, %ar : %s\" --decorate
+  l = log --pretty=format:\"%h - %an, %ar : %s\" --decorate
+[push]
+	autoSetupRemote = true
+[init]
+	defaultBranch = main
