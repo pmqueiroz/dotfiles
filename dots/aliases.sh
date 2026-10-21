@@ -135,11 +135,41 @@ function checkout {
 
    if test -n "$local_branchs"; then
       gum_log info 'deleting other branches. was:'
-      for branch in "${local_branchs[@]}"; do 
+      while IFS= read -r branch; do
          git_branch_style "$branch"
-      done
+      done <<< "$local_branchs"
 
-      echo "$local_branchs" | xargs git branch -q -D
+      while IFS= read -r branch; do
+         worktree_path=$(git worktree list --porcelain | awk -v ref="refs/heads/$branch" '
+            /^worktree /{ path=substr($0, 10) }
+            $0 == "branch " ref { print path; exit }')
+
+         if test -z "$worktree_path"; then
+            git branch -q -D "$branch"
+            continue
+         fi
+
+         if test -n "$(git -C "$worktree_path" status --porcelain 2>/dev/null)"; then
+            gum_log warn "keeping $branch: uncommitted changes in $worktree_path"
+            continue
+         fi
+
+         upstream=$(git for-each-ref --format='%(upstream:short)' "refs/heads/$branch")
+         upstream_track=$(git for-each-ref --format='%(upstream:track)' "refs/heads/$branch")
+
+         if test -z "$upstream"; then
+            gum_log warn "keeping $branch: never pushed (worktree $worktree_path)"
+            continue
+         fi
+
+         if [ "$upstream_track" != "[gone]" ] && [ "$(git rev-list --count "$upstream..$branch")" != "0" ]; then
+            gum_log warn "keeping $branch: unpushed commits (worktree $worktree_path)"
+            continue
+         fi
+
+         gum_log info "removing worktree $worktree_path"
+         git worktree remove "$worktree_path" && git branch -q -D "$branch"
+      done <<< "$local_branchs"
    fi
 }
 
